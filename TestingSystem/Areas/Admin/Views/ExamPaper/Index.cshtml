@@ -1,0 +1,115 @@
+﻿@model IEnumerable<TestingSystem.Models.ExamPaper>
+
+@{
+    ViewBag.Title = "Index";
+
+    //Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+@*<html>
+<head>*@
+   
+@*</head>*@
+@*<body>*@
+    <h2>Index</h2>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <br />
+
+    <form action="/Admin/ExamPaper/Index" method="get" class="form-control">
+        Time: <input type="number" name="Time" min="1" class="form-control" placeholder="Time" />
+        Status:<select name="Status" class="form-control">
+            <option value="">Choice Status</option>
+            <option value="false">Draff</option>
+            <option value="true">Public</option>
+        </select>
+        Number Of Question: <input type="number" placeholder="Number Of Question" min="1" name="NumberOfQuestion" class="form-control" />
+        Create By : <select name="CreatedBy"><option value=""></option></select>
+        Create Date : <input type="date" name="CreatedDate" class="form-control" />
+        <br />
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    <h1 id="test"></h1>
+<table  id="choose-address-table" class="ui-widget ui-widget-content">
+    <tr class="ui-widget-header ">
+        @*<th>
+                    @Html.DisplayNameFor(model => model.CreatedBys.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModifiedBys.UserName)
+                </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfQuestion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+
+        <th>Edit</th>
+        <th>Details</th>
+        <th>Delete</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+                        @Html.DisplayFor(modelItem => item.CreatedBys.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedBys.UserName)
+                    </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td  class="nr">
+                @Html.DisplayTextFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfQuestion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ExamPaperID })
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.ExamPaperID })
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.ExamPaperID }, new { onclick = "return confirm('Are you sure you wish to delete ?');" })
+            </td>
+        </tr>
+    }
+</table>
+@*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        $(document).(function ())
+        {
+
+        }
+    </script>*@
+@*</body>
+</html>*@

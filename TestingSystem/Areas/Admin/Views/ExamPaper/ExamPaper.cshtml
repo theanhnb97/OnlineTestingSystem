@@ -1,0 +1,347 @@
+﻿@model TestingSystem.Models.ExamPaper
+@{
+
+    ViewBag.Title = "Exam paper";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var isUpdate = ViewBag.IsUpdate;
+    var status = ViewBag.Status;
+}
+
+<h4>Exam Paper</h4>
+<br />
+<a class="group-btn" id="btn-export" href="/Admin/ExamPaper/ExportToPdfView/?examPaperId=@Model.ExamPaperID"><span class="glyphicon glyphicon-save"></span>   Export file</a>
+@using (Html.BeginForm("ExamPaper", "ExamPaper", FormMethod.Post, new { id = "ExamPaperForm", area = "Admin" }))//"popupForm"
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ExamPaperID)
+
+        <div class="form-group">
+            <div class="col-md-4">
+                <label>Title</label>
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                <label>Number Of Question</label>
+                @Html.EditorFor(model => model.NumberOfQuestion, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.NumberOfQuestion, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                <label>Time</label>
+                @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Time, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <label>Status</label>
+                <select class="form-control" name="Status">
+                    @if (status == true)
+                    {
+                        <option selected value="true">Public</option>
+                        <option value="false">Draff</option>
+                    }
+                    else
+                    {
+                        <option value="true">Public</option>
+                        <option selected value="false">Draff</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-4">
+                <div class="form-check">
+                    <!-- ko hiểu sao nếu Model.IsActive = true thì value lại = "value" -->
+                    @{var isActive = (Model.IsActive ? "true" : "false");}
+                    <input class="form-check-input" name="IsActive" type="checkbox" id="isActive" value="@isActive" checked="@Model.IsActive">
+                    <label class="form-check-label" for="isActive">
+                        Is Active
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <input type="submit" value="Save and refresh" class="btn btn-primary" />
+        @Html.ActionLink("Back", "ExamPapers", "ExamPaper", new { area = "Admin", @class = ""})
+    </div>
+}
+
+@* Question list *@
+<br />
+<br />
+<h4>Question List</h4>
+<div class="tablecontainer">
+    <button type="button" id="btn-add-question" class="btn btn-primary">Add questions</button>
+    <br />
+    <br />
+    <table id="examPaperQuestionTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="select_all" value="1" id="exam-paper-question-select-all"></th>
+                <th>Content</th>
+                <th>Category</th>
+                <th>Level</th>
+                <th>CreatedDate</th>
+                <th>IsActive</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<br />
+
+
+@section scripts
+{
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $("#ExamPaperForm").validate({
+                rules: {
+                    Title: "required",
+                    NumberOfQuestion: {
+                        required: true,
+                        number: true
+                    },
+                    Time: {
+                        required: true,
+                        number: true
+                    }
+                },
+                messages: {
+                    Title: "Title is required",
+                    NumberOfQuestion:
+                    {
+                        required: "Number of question is required",
+                        number: "Number of question must be a number"
+                    },
+                    Time:
+                    {
+                        required: "Title is required",
+                        number: "Title must be a number"
+                    },
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    // Add the `help-block` class to the error element
+                    error.addClass("help-block");
+
+                    if (element.prop("type") === "checkbox") {
+                        error.insertAfter(element.parent("label"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).parents(".col-md-4").addClass("has-error").removeClass("has-success");
+
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).parents(".col-md-4").addClass("has-success").removeClass("has-error");
+
+                }
+            });
+
+            $("#isActive").change(function () {
+                if ($(this).prop("checked") === true) {
+                    $("#isActive").val("true");
+                }
+                else if ($(this).prop("checked") === false) {
+                    $("#isActive").val("false");
+                }
+            });
+
+
+            var examPaperQuestionTable = $('#examPaperQuestionTable').DataTable({
+                //orderCellsTop: true,
+                //fixedHeader: true,
+
+                "ajax": {
+                    "url": "/Admin/Question/GetQuestionsByExamPaperId/?examPaperId=@Model.ExamPaperID",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "ExamPaperQuestionID", "width": "3%" },
+                    { "data": "Content", "width": "60%" },
+                    { "data": "CategoryName", "width": "20%" },
+                    { "data": "Level", "width": "5%" },
+                    {
+                        "data": "CreatedDate", "width": "6%", "render": function (data) {
+                            return moment(data).format('DD/MM/YYYY');
+                        }
+                    },
+                    {
+                        "data": "IsActive", "width": "3%", "render": function (data) {
+                            if (data) {
+                                return '<input type="checkbox" disabled checked/>';
+                            }
+                            else {
+                                return '<input type="checkbox" disabled />';
+                            }
+                        }
+                    },
+
+                    {
+                        "data": "ExamPaperQuestionID", "width": "3%", "render": function (data) {
+                            return '<a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                        },
+                    }
+                ],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                    }
+                }],
+                'order': [[1, 'asc']]
+
+            });
+
+            // Handle click on "Select all" control
+            $('#exam-paper-question-select-all').on('click', function () {
+                // Get all rows with search applied
+                var rows = examPaperQuestionTable.rows({ 'search': 'applied' }).nodes();
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+            // Handle click on checkbox to set state of "Select all" control
+            $('#examPaperQuestionTable tbody').on('change', 'input[type="checkbox"]', function () {
+                // If checkbox is not checked
+                if (!this.checked) {
+                    var el = $('#exam-paper-question-select-all').get(0);
+                    // If "Select all" control is checked and has 'indeterminate' property
+                    if (el && el.checked && ('indeterminate' in el)) {
+                        // Set visual state of "Select all" control
+                        // as 'indeterminate'
+                        el.indeterminate = true;
+                    }
+                }
+            });
+
+            $("#delete-all").on("click",
+                function (e) {
+                    var data = examPaperQuestionTable.$('input.delete-all-checkbox:checkbox:checked');
+                    debugger;
+                    if (data.length === 0) {
+                        $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
+                        $("#error-msgbox-modal #error-msg1").text('');
+                        $('#error-msgbox-modal').modal('show');
+                    } else {
+                        var ids = [];
+                        $.each(data, function (index, elem) {
+                            var rowId = $(elem).val();
+                            if (ids.indexOf(rowId) < 0) {
+                                ids.push(rowId);
+                            }
+                        });
+                        debugger;
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/ExamPaperQuestion/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                type: "Get",
+                                datatype: "json",
+                                traditional: true,
+                                error: function (data) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (data) {
+                                    if (data.status) {
+                                        debugger;
+                                        $.notify("Delete question successfully!", "success");
+                                        examPaperQuestionTable.ajax.reload();
+                                    }
+                                    //location.reload();
+                                }
+
+                            });
+                            e.stopPropagation();
+                        });
+                    }
+
+                });
+
+            setTimeout(function () {
+
+                $(".delete-row").on("click",
+                    function (e) {
+                        var ids = [];
+                        var id = $(this).data("val-id");
+                        if (ids.indexOf(id) < 0) {
+                            ids.push(id);
+                        }
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/ExamPaperQuestion/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                traditional: true,
+                                type: "Get",
+                                datatype: "json",
+                                error: function (status) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (data) {
+                                    if (data.status) {
+                                        debugger;
+                                        $.notify("Delete question successfully!", "success");
+                                       examPaperQuestionTable.ajax.reload();
+                                    }
+                                    //location.reload();
+                                }
+
+                            });
+                            e.stopPropagation();
+                        });
+                    });
+
+            }, 500);
+
+            $('#btn-add-question').click(function () {
+                $('#basicExampleModal').modal('show');
+            });
+
+        });
+    </script>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <script type="text/javascript">
+            $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
+        </script>
+    }
+
+    @Html.Partial("_MessageBoxError")
+    @if (!string.IsNullOrEmpty((string)TempData["Failure"]))
+    {
+        <script type="text/javascript">
+            // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
+            $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
+            $("#error-msgbox-modal #error-msg1").text('');
+            $('#error-msgbox-modal').modal('show');
+        </script>
+    }
+    @Html.Partial("_MessageBoxDelete");
+    @Html.Partial("~/Areas/Admin/Views/ExamPaperQuestion/ExamPaperQuestions.cshtml");
+}

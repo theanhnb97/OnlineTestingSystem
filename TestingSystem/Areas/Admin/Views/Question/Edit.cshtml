@@ -1,0 +1,424 @@
+﻿@using TestingSystem.Models
+@*@model TestingSystem.DataTranferObject.Question.QuestionAnswerDTO*@
+@model TestingSystem.Models.Question
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var listAnswerByQuestionID = ViewBag.Answer;
+    int j = 0;
+}
+
+@*<div class="card">
+        <div class="card-header bg-light">Create Question</div>
+        <div class="card-body">
+            <form action="/Admin/Question/Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input type="hidden" value="@Model.QuestionID" name="QuestionID" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label " style="margin-bottom: 10px;margin-left: 19px;" for="Content">Content Question</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="Content" class="form-control" value="@Model.Content" required />
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-left: 0px;">
+                                <label for="control-label " style="margin-left: 7px;">Level</label>
+                                <select class="form-control" id="Level" name="Level" required>
+                                    @foreach (var item in ViewBag.listLevel)
+                                    {
+                                        if (Model.Level == item.LevelStep)
+                                        {
+                                            <option selected value="@Model.Level">
+                                                @item.Name
+                                            </option>
+                                        }
+
+                                        if (Model.Level != item.LevelStep)
+                                        {
+                                            <option selected value="@Model.Level">
+                                                @item.Name
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <div class="checkbox">
+                                        @Html.EditorFor(model => model.IsActive)
+                                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="control-label ">Category</label>
+                                <select class="form-control" id="CategoryID" name="CategoryID" required>
+                                    @foreach (var item in ViewBag.listCategory)
+                                    {
+
+                                        if (Model.CategoryID == item.CategoryID)
+                                        {
+                                            <option selected value="@Model.CategoryID">
+                                                @item.Name
+                                            </option>
+                                        }
+                                        if (Model.CategoryID != item.CategoryID)
+                                        {
+                                            <option value="@Model.CategoryID">
+                                                @item.Name
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-left: -15px">
+                                <label class="control-label " for="Image" style="margin-right: 50px;margin-bottom: 16px;">Image</label>
+                                <div class="col-md-10">
+                                    <img id="FileImage" src="~/Content/QuestionUpload/Images/@Model.Image" alt="your image" class="img-thumbnail" width="150" />
+                                    <input type="file" name="Image" class="form-control" id="imgInp" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" value="1" name="CreatedBy" />
+                    <input type="hidden" value="1" name="ModifiedBy" />
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Update" class="btn btn-primary" />
+                        <a class="btn btn-info" href="/Admin/Question/Index">Back to List</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>*@
+@*  *@
+<style>
+    .card {
+        padding-left: 50px;
+        padding-right: 50px;
+        /*background-color: papayawhip;*/
+    }
+</style>
+<div class="card">
+    <div class="card-header bg-light"><h4>Create Question</h4></div>
+    <div class="card-body">
+        <form action="/Admin/Question/Edit" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <input type="hidden" value="@Model.QuestionID" name="QuestionID" />
+                <div class="form-group">
+                    <label class="control-label col-md-2 " style="margin-bottom: 10px" for="Content">Content Question</label>
+                    <div class="col-md-10">
+                        <textarea name="Content" id="Content" required>@Model.Content</textarea>
+                        @*<input type="text" name="Content" class="form-control" required/>*@
+                        <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2 " for="Image">Image</label>
+                    <div class="col-md-10">
+                        <img id="FileImage" src="~/Content/QuestionUpload/Images/@Model.Image" alt="your image" class="img-thumbnail" width="150" />
+                        <input type="file" name="Image" class="form-control" id="imgInp" style="width: 248px;" />
+                    </div>
+                </div>
+                <label class="control-label col-md-2" for="Level">Level</label>
+                <div class="col-md-10">
+                    <div class="input-group mb-3">
+                        <select class="form-control" id="Level" name="Level" style="margin-left:-9px;width: 248px; margin-bottom: 20px" required>
+                            @foreach (var item in ViewBag.listLevel)
+                            {
+                                if (Model.Level == item.LevelStep)
+                                {
+                                    <option selected value="@Model.Level">
+                                        @item.Name
+                                    </option>
+                                }
+                                if (Model.Level != item.LevelStep)
+                                {
+                                    <option selected value="@Model.Level">
+                                        @item.Name
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <label class="control-label col-md-2" for="CategoryID">Category</label>
+                <div class="col-md-10">
+                    <div class="input-group mb-3">
+                        <select class="form-control" id="CategoryID" name="CategoryID" style="margin-left: -8px;width: 247px;" required>
+                            @foreach (var item in ViewBag.listCategory)
+                            {
+
+                                if (Model.CategoryID == item.CategoryID)
+                                {
+                                    <option selected value="@Model.CategoryID">
+                                        @item.Name
+                                    </option>
+                                }
+                                if (Model.CategoryID != item.CategoryID)
+                                {
+                                    <option value="@Model.CategoryID">
+                                        @item.Name
+                                    </option>
+                                }
+                            }
+                        </select>
+                        <div class="col-md-2">
+                            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#ModalAddCate" style="margin-left: -14px;">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsActive)
+                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p></p>
+            @*<hr style="border: 1px solid gray;width: 929px"/>*@
+            @*<div><a href="#" id="addNew" style="margin-right:40px; float: right">Add More Aswer</a></div>*@
+            @*<div><input type="button" class="btn btn-success" id="addNew" value="Add More Aswer" style="float: right;margin-right:40px;"/></div>*@
+            <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0" style="margin-left:44px ">
+                <tr>
+                    <th></th>
+                    <th>Answer Content</th>
+                    <th>IsCorrect</th>
+                    <th><input type="button" class="btn btn-success" id="addNew" value="Add More Aswer" style="float: left;margin-right:40px;" /></th>
+                </tr>
+                @*@if (listAnswerByQuestionID != null && listAnswerByQuestionID.count() > 0)*@
+
+
+                @foreach (Answer item in ViewBag.Answer)
+                {
+                    //count++;
+                    <tr style="border:1px solid black">
+                        <td style="text-align: center"><b>Answer</b></td>
+                        <td>
+                            @*@Html.HiddenFor(m => item.AnswerID, new { @class = "form-control" })*@
+                            @*@Html.EditorFor(m => item.AnswerContent, new { @id = "chk1", @class = "chkWebSite", value = "true" })*@
+                            @*<td>@Html.CheckBoxFor(m => item.IsCorrect, new { @id = "chk1", @class = "chkWebSite", value = "true" })</td>*@
+                            <input type="hidden" id="AnswerID" name="AnswerID" value="@item.AnswerID">
+                            <input type="text" id="ck1" name="AnswerContent" value="@item.AnswerContent" onchange="myFunction(this)" class="form-control chkWebSite">
+                        </td>
+                        <td>
+                            <input type="checkbox" id="IsCorrect" checked="@item.IsCorrect" name="IsCorrect" value="@item.AnswerContent" />
+                        </td>
+                        <td>
+                            @if (j > 0)
+                            {
+                                <a href="#" class="remove">Remove</a>
+                                @*<input type="button" class="btn btn-danger remove" value="Remove"/>*@
+                            }
+                        </td>
+                    </tr>
+                    j++;
+                }
+
+            </table>
+
+
+            @*<input type="submit" value="Create Answer" />*@
+            @*<input type="hidden" value="1" name="CreatedBy" />
+                <input type="hidden" value="1" name="ModifiedBy" />*@
+            <div class="form-group" style="margin-bottom: 100px">
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    <a class="btn btn-info" href="/Admin/Question/Questions">Back to List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalAddCate" tabindex="-1" role="dialog" aria-labelledby="ModalAddCate" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="Name">Category Name</label>
+                    <input type="text" name="Name" class="form-control" id="cateName" />
+                </div>
+                <div class="form-group">
+                    <label for="Description">Is Active</label>
+                    <input type="checkbox" name="IsActive" value="true" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="AddCate">Add</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Question/ckeditor/ckeditor.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        CKEDITOR.replace('Content');
+    });
+</script>
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#FileImage').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#imgInp").change(function () {
+        readURL(this);
+    });
+</script>
+<script>
+    $('#AddCate').off('click').click(function () {
+        debugger;
+        var catename = $('[name=Name]');
+        var validate = false;
+        if (catename.val() === "") {
+            catename.css('border', '1px solid red');
+        }
+        else {
+            catename.css('border', '1px solid green');
+            validate = true;
+        }
+        if (validate) {
+            var categoryObj = {
+                Name: $('[name=Name]').val(),
+                IsActive: $('[name=IsActive]').val()
+            };
+            $.ajax({
+                url: "/Admin/Question/AddCategory",
+                type: 'POST',
+                dataType: 'JSON',
+                data: JSON.stringify(categoryObj),
+                contentType: "application/json",
+                success: function (result) {
+                    //if (result > 0) {
+                    $('#CategoryID').append($('<option>', {
+                        value: result,
+                        text: catename.val()
+                    }));
+                    $("#ModalAddCate").modal("hide");
+                    // }
+                    //else {
+                    //    console.log('Add Category Fail!');
+                    //}
+                }
+            });
+        }
+    });
+
+</script>
+
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script language="javascript">
+    $(document).ready(function () {
+        //1. Add new row
+        $("#addNew").click(function (e) {
+            e.preventDefault();
+            var $tableBody = $("#dataTable");
+            var $trLast = $tableBody.find("tr:last");
+            var $trNew = $trLast.clone();
+
+            var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
+            $trNew.find("td:last").html('<a href="javascript:void(0)" class="removeInput">Remove</a>');
+
+            $.each($trNew.find(':input'), function (i, val) {
+                // Replaced Name
+                var oldN = $(this).attr('name');
+                var newN = oldN.replace('[' + suffix + ']', '[' + (parseInt(suffix) + 1) + ']');
+                $(this).attr('name', newN);
+                //Replaced value
+                var type = $(this).attr('type');
+                if (type.toLowerCase() == "text") {
+                    $(this).attr('value', '');
+                }
+
+                // If you have another Type then replace with default value
+                $(this).removeClass("input-validation-error");
+
+            });
+            $trLast.after($trNew);
+
+            // Re-assign Validation
+            var form = $("form")
+                .removeData("validator")
+                .removeData("unobtrusiveValidation");
+            $.validator.unobtrusive.parse(form);
+        });
+
+        // 2. Remove
+
+        setTimeout(function () {
+            $("a.removeInput").on("click", function (e) {
+                debugger;
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            });
+
+        },
+            3000);
+
+    });
+</script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#FileImage').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imgInp").change(function () {
+        readURL(this);
+    });
+</script>
+@* change content answer => change value iscorrect tag *@
+<script>
+    function myFunction(val) {
+        document.getElementById("IsCorrect").value = val.value; 
+    }
+</script>
+
+

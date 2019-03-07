@@ -1,0 +1,181 @@
+﻿@model IEnumerable<TestingSystem.Models.Question>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<style type="text/css">
+    .nhdai-table-title {
+        background: #272727;
+        color: #eee;
+    }
+
+    .card-header {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .searchform {
+        padding-top: 50px;
+        font-family: serif;
+    }
+
+    .card {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+</style>
+<form class="form-inline searchform card" action="/Admin/Question/Filter/">
+    <div class="form-group">
+        <label for="sel1">Level</label>
+        <select class="form-control" id="Level" name="Level">
+            <option value="-1">Choice one</option>
+            @foreach (var item in ViewBag.listLevel)
+            {
+                <option value="@item.LevelId">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="sel1">Category</label>
+        <select class="form-control" id="CategoryID" name="CategoryID">
+            <option value="-1">Choice one</option>
+            @foreach (var item in ViewBag.listCategory)
+            {
+                <option value="@item.CategoryID">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="CreateBy">Created By</label>
+        <input type="text" class="form-control" id="CreateBy" name="CreatedBy">
+    </div>
+    <div class="form-group">
+        <label for="CreatedDate">Created Date</label>
+        <input type="date" class="form-control" id="CreatedDate" name="CreatedDate">
+    </div>
+    <div class="form-group">
+        <label for="Content">Content</label>
+        <input type="text" class="form-control" id="Content" name="Content">
+    </div>
+    <button type="submit" class="btn btn-default">Filter</button>
+</form>
+<form  class="card" action="/Admin/Question/Search/">
+    <input type="text" placeholder="Search.." name="input">
+    <button type="submit">Submit</button>
+</form>
+<div class="card">
+    <div class="card-header bg-light">Question</div>
+    <div class="card-body">
+        <div>
+            <a class="btn btn-success" href="/Admin/Banner/Create"><i class="fa fa-plus"></i> Create New</a>
+        </div>
+        <table class="table table-bordered">
+            <tr class="nhdai-table-title">
+                <th><input type="checkbox" name="checkAll" id="checkAll" onclick="toggle(this);" style="text-align:center; vertical-align: middle;" /> </th>
+                <th>
+                    Content
+                </th>
+                <th>
+                    Image
+                </th>
+                <th>
+                    CategoryID
+                </th>
+                <th>
+                    IsActive
+                </th>
+                <th>
+                    CreatedBy
+                </th>
+                <th>
+                    CreatedDate
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="text-align:center; vertical-align: middle;"><input type="checkbox" class="checkCheckbox" data-id="@item.QuestionID" name="cb_@item.QuestionID" id="cb_@item.QuestionID" /></td>
+                    <td>
+                        @item.Content
+                    </td>
+                    <td>
+                        @item.Image
+                    </td>
+                    <td>
+                        @item.CategoryID
+                    </td>
+                    <td>
+                        @item.IsActive
+                    </td>
+                    <td>
+                        @item.CreatedBy
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(item.CreatedDate).ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" href="/Admin/Question/Edit/@item.QuestionID"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="btn btn-danger btn-sm" href="/Admin/Question/Delete/@item.QuestionID"><i class="fa fa-trash"></i> Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+        <a class="btn" id="btnRemove" style="background:burlywood; color: yellow;padding: 4px">Remove</a>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    function changeCheck() {
+        if ($('#checkAll').is(":checked")) {
+            $(".checkCheckbox").each(function (index) {
+                var id = $(this).data('id');
+                var id11 = $(this).attr('id');
+                var s = '#' + id11;
+                var a = $(s).is(':checked');
+                if (a == false) {
+                    $(s).attr("checked", true);
+                }
+
+            });
+        } else {
+            $(".checkCheckbox").each(function (index) {
+                var id = $(this).data('id');
+                var id11 = $(this).attr('id');
+                var s = '#' + id11;
+                var a = $(s).is(':checked');
+                if (a == true) {
+                    $(s).removeAttr("checked");
+                }
+            });
+        }
+
+    }
+
+    function check() {
+        $(document).ready(function () {
+            $(".checkCheckbox").each(function (index) {
+                var id = $(this).data('id');
+                var id11 = $(this).attr('id');
+                var s = '#' + id11;
+                var a = $(s).prop('checked');            
+
+                $(s).attr("checked", a);
+            });
+
+        });
+    }
+
+    function toggle(source) {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+
+</script>
+

@@ -1,0 +1,225 @@
+﻿@{
+    ViewBag.Title = "Exam paper list";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h4>Exam Paper List</h4>
+<div class="tablecontainer">
+    <div class="button-area">
+        <a class="group-btn" id="btn-add" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-plus"></span>   Add new</a>
+        <a class="group-btn" id="btn-import" href="@Url.Action("ImportExamPaper","ExamPaper")"><span class="glyphicon glyphicon-open"></span>   Import file</a>
+        <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>   Delete all</a>
+    </div>
+
+    <table id="examPaperTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th><input type="checkbox" name="select_all" value="1" id="examPaper-select-all"></th>
+                <th>Title</th>
+                <th>Questions</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>CreatedDate</th>
+                <th>IsActive</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+@section scripts
+{
+    @if (TempData["Success"] != null)
+    {
+        <script type="text/javascript">
+            $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
+        </script>
+    }
+
+    @Html.Partial("_MessageBoxError");
+    @if (!string.IsNullOrEmpty((string)TempData["Failure"]))
+    {
+        <script type="text/javascript">
+            // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
+            $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
+            $("#error-msgbox-modal #error-msg1").text('');
+            $('#error-msgbox-modal').modal('show');
+        </script>
+    }
+
+    @Html.Partial("_MessageBoxDelete");
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var examPaperTable = $('#examPaperTable').DataTable({
+                //orderCellsTop: true,
+                //fixedHeader: true,
+
+                "ajax": {
+                    "url": "/Admin/ExamPaper/GetExamPapers",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "ExamPaperID", "width": "3%" },
+                    { "data": "Title", "width": "60%" },
+                    { "data": "NumberOfQuestion", "width": "8%" },
+                    { "data": "Time", "width": "8%" },
+                    {
+                        "data": "Status", "width": "3%", "render": function (data) {
+                            if (data) {
+                                return '<input type="checkbox" disabled checked/>';
+                            }
+                            else {
+                                return '<input type="checkbox" disabled />';
+                            }
+                        }
+                    },
+                    {
+                        "data": "CreatedDate", "width": "6%", "render": function (data) {
+                            return moment(data).format('DD/MM/YYYY');
+                        }
+                    },
+                    {
+                        "data": "IsActive", "width": "7%", "render": function (data) {
+                            if (data) {
+                                return '<input type="checkbox" disabled checked/>';
+                            }
+                            else {
+                                return '<input type="checkbox" disabled />';
+                            }
+                        }
+                    },
+                    {
+                        "data": "ExamPaperID", "width": "5%", "render": function (data) {
+                            return '<a class="update-row" href="/Admin/ExamPaper/ExamPaper/?examPaperId=' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
+                        },
+                    }
+                ],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                    }
+                }],
+                'order': [[1, 'asc']]
+
+            });
+
+            // Handle click on "Select all" control
+            $('#examPaper-select-all').on('click', function () {
+                // Get all rows with search applied
+                var rows = examPaperTable.rows({ 'search': 'applied' }).nodes();
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+            // Handle click on checkbox to set state of "Select all" control
+            $('#examPaperTable tbody').on('change', 'input[type="checkbox"]', function () {
+                // If checkbox is not checked
+                if (!this.checked) {
+                    var el = $('#examPaper-select-all').get(0);
+                    // If "Select all" control is checked and has 'indeterminate' property
+                    if (el && el.checked && ('indeterminate' in el)) {
+                        // Set visual state of "Select all" control
+                        // as 'indeterminate'
+                        el.indeterminate = true;
+                    }
+                }
+            });
+
+            $("#delete-all").on("click",
+                function (e) {
+                    var data = examPaperTable.$('input.delete-all-checkbox:checkbox:checked');
+                    debugger;
+                    if (data.length === 0) {
+                        $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
+                        $("#error-msgbox-modal #error-msg1").text('');
+                        $('#error-msgbox-modal').modal('show');
+                    } else {
+                        var ids = [];
+                        $.each(data, function (index, elem) {
+                            var rowId = $(elem).val();
+                            if (ids.indexOf(rowId) < 0) {
+                                ids.push(rowId);
+                            }
+                        });
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/ExamPaper/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                type: "Get",
+                                datatype: "json",
+                                traditional: true,
+                                error: function (data) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (data) {
+                                    if (data.status) {
+                                        debugger;
+                                        $.notify("Delete exam paper successfully!", "success");
+                                        //examPaperTable.ajax.reload();
+                                    }
+                                    location.reload();
+                                }
+
+                            });
+                            e.stopPropagation();
+                        });
+                    }
+
+                });
+
+            setTimeout(function () {
+
+                $(".delete-row").on("click",
+                    function (e) {
+                        var ids = [];
+                        var id = $(this).data("val-id");
+                        if (ids.indexOf(id) < 0) {
+                            ids.push(id);
+                        }
+
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/ExamPaper/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                traditional: true,
+                                type: "Get",
+                                datatype: "json",
+                                error: function (status) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (data) {
+                                    if (data.status) {
+                                        debugger;
+                                        $.notify("Delete exam paper successfully!", "success");
+                                        //examPaperTable.ajax.reload();
+                                    }
+                                    location.reload();
+                                }
+
+                            });
+                            e.stopPropagation();
+                        });
+                    });
+
+            }, 500);
+        });
+    </script>
+}
+
+
+
