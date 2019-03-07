@@ -1,6 +1,4 @@
 
-*.exe
-*.dll
 /.vs
 /TestingSystem.Sevice/obj
 /TestingSystem.Sevice/bin
