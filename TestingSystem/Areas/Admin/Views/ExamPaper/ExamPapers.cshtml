@@ -33,7 +33,7 @@
     @if (TempData["Success"] != null)
     {
         <script type="text/javascript">
-            $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
+    $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
         </script>
     }
 
@@ -41,10 +41,10 @@
     @if (!string.IsNullOrEmpty((string)TempData["Failure"]))
     {
         <script type="text/javascript">
-            // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
-            $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
-            $("#error-msgbox-modal #error-msg1").text('');
-            $('#error-msgbox-modal').modal('show');
+    // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
+    $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
+    $("#error-msgbox-modal #error-msg1").text('');
+    $('#error-msgbox-modal').modal('show');
         </script>
     }
 

@@ -3,9 +3,11 @@
 
 @model List<TestingSystem.DataTranferObject.Question.QuestionDto>
 @{
-    var examPaper = (ExamPaper)ViewBag.ExamPaper;
-    var answers = (List<Answer>)ViewBag.Answers;
-    var stt = 0;
+                /**/
+
+                var examPaper = (ExamPaper)ViewBag.ExamPaper;
+                var answers = (List<Answer>)ViewBag.Answers;
+                var stt = 0;
 }
 <html>
 <head>
@@ -21,7 +23,7 @@
                 Time: @examPaper.Time Minute
             </div><br />
             <div class="date">
-                Date: ...../...../
+                Date: ...../...../.....
             </div><br />
             <div class="NumberOfQuestion">
                 Number Of Question : @*@examPaper.NumberOfQuestion*@

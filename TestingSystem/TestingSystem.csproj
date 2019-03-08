@@ -7278,8 +7278,6 @@
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Areas\Admin\Views\ExamPaperQuestion\ExamPaperQuestions.cshtml" />
-    <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExportToPdf.cshtml" />
