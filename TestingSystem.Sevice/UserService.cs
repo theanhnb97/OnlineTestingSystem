@@ -125,6 +125,9 @@
         /// </summary>
         /// <returns>The <see cref="int"/></returns>
         int CountUser();
+
+        bool Recovery(string email);
+        bool Reset(string email, string pass);
     }
 
     /// <summary>
@@ -317,6 +320,16 @@
         public List<User> ListAllDisable()
         {
             return userRepository.ListAllDisable();
+        }
+
+        public bool Recovery(string email)
+        {
+            return userRepository.Recovery(email);
+        }
+
+        public bool Reset(string email, string pass)
+        {
+            return userRepository.Reset(email, pass);
         }
     }
 }

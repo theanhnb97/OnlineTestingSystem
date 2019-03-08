@@ -1,5 +1,9 @@
-﻿namespace TestingSystem.Controllers
+﻿using System;
+
+namespace TestingSystem.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using TestingSystem.Common;
     using TestingSystem.Sevice;
@@ -23,22 +27,75 @@
             this.userService = userService;
         }
 
-        //GET: Account
         /// <summary>
-        /// The Register
+        /// The Recovery
         /// </summary>
         /// <returns>The <see cref="ActionResult"/></returns>
-        public ActionResult Register()
+        public ActionResult Recovery()
         {
             return View();
         }
 
-        //[HttpGet]
-        //public ActionResult Verify()
-        //{
-        //    return RedirectToAction("Index", "Home");
-        //}
-        //[HttpPost]
+
+        /// <summary>
+        /// The Recovery
+        /// </summary>
+        /// /// <param name="email">The key<see cref="string"/></param>
+        /// <returns>The <see cref="ActionResult"/></returns>
+        [HttpPost]
+        public ActionResult Recovery(string email)
+        {
+            userService.Recovery(email);
+            return RedirectToAction("Logout");
+        }
+
+        public ActionResult Reset(string key)
+        {
+            string key1 = key;
+            key1 = key1.Substring(0, key1.Length - 1);
+            List<char> hashList = key1.ToCharArray().ToList();
+            hashList.Reverse();
+            string hash = "";
+            foreach (var item in hashList)
+                hash += item;
+            key1 = Base64.Decode(hash);
+            DateTime time = DateTime.Parse(key1.Split('_')[1]);
+            if (time < DateTime.Now)
+            {
+                Response.StatusCode = 404;
+                return View("Not found");
+            }
+            ViewBag.email = key;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Reset(string email, string pass, string comfirmpass)
+        {
+            if (pass != comfirmpass)
+            {
+                ViewBag.email = email;
+                return View();
+            }
+            email = email.Substring(0, email.Length - 1);
+            List<char> hashList = email.ToCharArray().ToList();
+            hashList.Reverse();
+            string hash = "";
+            foreach (var item in hashList)
+                hash += item;
+            email = Base64.Decode(hash);
+            DateTime time = DateTime.Parse(email.Split('_')[1]);
+            if (time < DateTime.Now)
+            {
+                Response.StatusCode = 404;
+                return View("Not found");
+            }
+            email = email.Split('_')[0];
+            userService.Reset(email, Encryptor.MD5Hash(comfirmpass));
+            return RedirectToAction("Login", "Login");
+        }
+
+
+
         /// <summary>
         /// The Verify
         /// </summary>
@@ -51,7 +108,8 @@
                 return RedirectToAction("Login", "Login");
             else
             {
-                return View();
+                Response.StatusCode = 404;
+                return View("Not found!");
             }
         }
 

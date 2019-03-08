@@ -1,4 +1,6 @@
-﻿namespace TestingSystem.Data.Repositories
+﻿using Microsoft.SqlServer.Server;
+
+namespace TestingSystem.Data.Repositories
 {
     using System;
     using System.Collections.Generic;
@@ -124,6 +126,11 @@
         /// </summary>
         /// <returns>The <see cref="int"/></returns>
         int CountUser();
+
+
+        bool Recovery(string email);
+
+        bool Reset(string email, string pass);
     }
 
     /// <summary>
@@ -257,7 +264,7 @@
         /// </summary>
         /// <param name="emailTo">The emailTo<see cref="string"/></param>
         /// <param name="name">The name<see cref="string"/></param>
-        internal void Send(string emailTo, string name)
+        private void Send(string emailTo, string name)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(HttpContext.Current.Server.MapPath("~/TempEmail/Config/Data.xml"));
@@ -284,8 +291,9 @@
                     r = domain + "/Account/Verify/?key=" + Base64.Encode(EmailTo);
                 Body += r;
             }
-
-            mySendEmail.Send(EmailTo, Subject, Body);
+            string results = mySendEmail.Send(EmailTo, Subject, Body);
+            if (results != "true")
+                log.Debug(results);
         }
 
         /// <summary>
@@ -308,7 +316,6 @@
 
                 return myUser.Status;
             }
-
             return -1;
         }
 
@@ -402,9 +409,15 @@
             try
             {
                 User myUser = GetUserById(user.UserId);
-                DateTime? createData = myUser.CreatedDate;
-                myUser = user;
-                myUser.CreatedDate = createData;
+                //DateTime? createData = myUser.CreatedDate;
+                myUser.Address = user.Address;
+                myUser.Note = user.Note;
+                myUser.RoleId = user.RoleId;
+                myUser.Email = user.Email;
+                myUser.Name = user.Name;
+                myUser.Phone = user.Phone;
+                myUser.UpdatedDate = DateTime.Now;
+                myUser.Status = user.Status;
                 return DbContext.SaveChanges();
             }
             catch (Exception e)
@@ -538,6 +551,74 @@
             {
                 log.Debug(e.Message);
                 return null;
+            }
+        }
+
+        public bool Recovery(string email)
+        {
+            try
+            {
+                string email1 = email + "_" + DateTime.Now.AddMinutes(5).ToString();
+                String hash = "1" + Base64.Encode(email1);
+                List<char> hashList = hash.ToCharArray().ToList();
+                hashList.Reverse();
+                hash = "";
+                foreach (var item in hashList)
+                    hash += item;
+                SendRecovery(email, "", hash);
+                return true;
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return false;
+            }
+        }
+
+        private void SendRecovery(string emailTo, string name, string key)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(HttpContext.Current.Server.MapPath("~/TempEmail/Config/Data.xml"));
+
+            string domain = doc.DocumentElement.SelectSingleNode("/root/domain").InnerText;
+            string Email = doc.DocumentElement.SelectSingleNode("/root/email/username").InnerText;
+            string Pass = doc.DocumentElement.SelectSingleNode("/root/email/pass").InnerText;
+            string SendAs = doc.DocumentElement.SelectSingleNode("/root/email/sendAs").InnerText;
+            string NameAs = doc.DocumentElement.SelectSingleNode("/root/email/name").InnerText;
+            string Smtp = doc.DocumentElement.SelectSingleNode("/root/email/smtp").InnerText;
+            string Port = doc.DocumentElement.SelectSingleNode("/root/email/port").InnerText;
+
+            String EmailTo = emailTo;
+            SendEmail mySendEmail = new SendEmail(Email, Pass, SendAs, NameAs, Smtp, Port);
+            String Subject = "Online testing system - khôi phục mật khẩu!";
+            String Body = "";
+            StreamReader reader = new StreamReader(HttpContext.Current.Server.MapPath("~/TempEmail/Recovery-mail.html"));
+            string r = "";
+            while ((r = reader.ReadLine()) != null)
+            {
+                if (r.Trim() == "[Name]")
+                    r = " " + name;
+                if (r.Trim() == "[Recovery-link]")
+                    r = domain + "/Account/Reset/?key=" + key;
+                Body += r;
+            }
+            string results = mySendEmail.Send(EmailTo, Subject, Body);
+            if (results != "true")
+                log.Debug(results);
+        }
+
+        public bool Reset(string email, string pass)
+        {
+            try
+            {
+                var myUser = DbContext.Users.Where(x => x.Email == email).FirstOrDefault();
+                myUser.Password = pass;
+                return DbContext.SaveChanges()==1;
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return false;
             }
         }
     }

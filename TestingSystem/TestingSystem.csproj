@@ -6763,6 +6763,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\myjquery.js" />
     <Content Include="TempEmail\Config\Data.xml" />
+    <Content Include="TempEmail\Recovery-mail.html" />
     <Content Include="TempEmail\Verify-mail.html" />
     <Content Include="Views\_Login\Login.cshtml" />
     <Content Include="Assets\AdminLayout\bower_components\bootstrap-colorpicker\.bower.json" />
@@ -7324,11 +7325,12 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\_Register\Index.cshtml" />
-    <Content Include="Views\_Account\Register.cshtml" />
     <Content Include="Views\_Account\Verify.cshtml" />
     <Content Include="Views\_Error\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\_Account\Recovery.cshtml" />
+    <Content Include="Views\_Account\Reset.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
