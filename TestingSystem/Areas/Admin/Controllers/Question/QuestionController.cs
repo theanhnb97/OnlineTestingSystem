@@ -21,38 +21,48 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         private readonly IExamPaperService examPaperService;
 
 
-        public QuestionController(IUserService a,
+        public QuestionController(IUserService user,
             IQuestionService questionService, IAnswerService answerService,
-            IQuestionCategorySevice questionCategorySevice, IExamPaperService examPaperService):base(a)
+            IQuestionCategorySevice questionCategorySevice, IExamPaperService examPaperService) : base(user)
         {
             this.questionService = questionService;
             this.answerService = answerService;
             this.questionCategorySevice = questionCategorySevice;
             this.examPaperService = examPaperService;
+            //
         }
 
         [HttpPost]
         public JsonResult AddCategory(Models.QuestionCategory category)
         {
-            //fix cung
-            category.ModifiedBy = 1;
-            category.CreatedBy = 1;
+            category.ModifiedBy = int.Parse(Session["Name"].ToString());
+            category.CreatedBy = int.Parse(Session["Name"].ToString());
             // Default is true when create in CreateQuesiton View
             category.IsActive = true;
             return Json(questionCategorySevice.AddCategoryQuestion(category), JsonRequestBehavior.AllowGet);
         }
-
-        public ActionResult Questions()
+        public JsonResult _CheckCategoryNameAvailableCreate(string userdata)
         {
-            var listCategory = questionCategorySevice.GetAllQuestionCategories();
-            var listLevels = questionService.GetAlLevels();
-            ViewData["Category"] = listCategory;
-            ViewData["Level"] = listLevels;
-            return View();
+            try
+            {
+                var SeachData = questionCategorySevice.SearchCategories(userdata);
+                if (SeachData.Count() > 0)
+                {
+                    return Json(1);
+                }
+                else
+                {
+                    return Json(0);
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
         public ActionResult Index(QuestionFilterModel searchModel)
         {
-            var listCategory = questionCategorySevice.GetAllQuestionCategories();
+            var listCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
             var listLevels = questionService.GetAlLevels();
             ViewData["Category"] = listCategory;
             ViewData["Level"] = listLevels;
@@ -60,49 +70,22 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
             return View(listQuestionDtos);
         }
-        //[HttpPost]
-        //public ActionResult Index(QuestionFilterModel searchModel)
+        //[ActionName("GetQuestions")]
+        //public ActionResult GetQuestions(QuestionFilterModel searchModel)
         //{
-        //    var listCategory = questionCategorySevice.GetAllQuestionCategories();
-        //    var listLevels = questionService.GetAlLevels();
-        //    ViewData["Category"] = listCategory;
-        //    ViewData["Level"] = listLevels;
-
         //    var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
-        //    //searchModel.Level = null;
-        //    //searchModel.CategoryID = null;
-        //    //searchModel.CreatedDate = null;
-        //    //searchModel.CreatedBy = null;
-
-        //    return View(listQuestionDtos);
+        //    return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
         //}
-        [ActionName("GetQuestions")]
-        public ActionResult GetQuestions(QuestionFilterModel searchModel)
+        public ActionResult Search(string keySearch, QuestionFilterModel searchModel)
         {
-            // đổi thành filter.
-            var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
-            return Json(new { data = listQuestionDtos.OrderBy(x => x.CategoryID) }, JsonRequestBehavior.AllowGet);
-        }
+            var listCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
+            var listLevels = questionService.GetAlLevels();
+            ViewData["Category"] = listCategory;
+            ViewData["Level"] = listLevels;
 
-        public ActionResult Search(string input)
-        {
-            List<Models.QuestionCategory> listCategory = new List<Models.QuestionCategory>();
-            listCategory.Add(new Models.QuestionCategory
-            { CategoryID = 8, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "C#" });
-            listCategory.Add(new Models.QuestionCategory
-            { CategoryID = 10, IsActive = true, CreatedBy = 1, ModifiedBy = 1, Name = "Java" });
-            List<Level> listLevels = new List<Level>();
-            listLevels.Add(new Level { LevelId = 1, LevelStep = 1, Name = "Easy" });
-            listLevels.Add(new Level { LevelId = 2, LevelStep = 2, Name = "Normal" });
-            listLevels.Add(new Level { LevelId = 3, LevelStep = 3, Name = "Hard" });
-
-            ViewBag.listCategory = listCategory;
-            ViewBag.listLevel = listLevels;
-
-            var listQuetion = questionService.SearchByContent(input);
-            return View(listQuetion);
-        }
-
+            var listQuestionDtos = questionService.SearchByContent(keySearch, searchModel);
+            return View(listQuestionDtos);
+        }     
         public ActionResult Detail(int? id, QuestionFilterModel searchModel)
         {
             if (id == null)
@@ -124,25 +107,6 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
 
         }
-
-        [HttpGet]
-        [ActionName("GetQuestionID")]
-        public ActionResult GetQuestionID(int? questionId)
-        {
-            if (questionId > 0)
-            {
-
-                return View(questionService.FindID(questionId));
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            //ViewBag.Status = model.Status;
-            //ViewBag.IsUpdate = true;
-
-        }
-
         public ActionResult Delete(List<int> ids)
         {
             try
@@ -186,9 +150,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
                 new Answer() { AnswerID = 0, AnswerContent = "", IsCorrect = false },
             };
-            //get all category
-            var listCategory = questionCategorySevice.GetAllQuestionCategories();
-            //get all level
+            var listCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
             var listLevels = questionService.GetAlLevels();
             ViewData["Category"] = listCategory;
             ViewData["Level"] = listLevels;
@@ -200,14 +162,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
         [ValidateInput(false)]
         public ActionResult Create(Models.Question question, HttpPostedFileBase Image, List<Answer> listAnswers)
         {
-            //using (TransactionScope transaction = new TransactionScope())
-            //{
-            //    transaction.Complete();
-            //}
-            Session["CreatedBy"] = 1;
-            Session["ModifiedBy"] = 1;
-            question.CreatedBy = Convert.ToInt32(Session["CreatedBy"]);
-            question.ModifiedBy = Convert.ToInt32(Session["ModifiedBy"]);
+            question.CreatedBy = int.Parse(Session["Name"].ToString());
+            question.ModifiedBy = int.Parse(Session["Name"].ToString());
             if (Image != null && Image.ContentLength > 0)
             {
                 string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"),
@@ -238,13 +194,10 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
             return RedirectToAction("Index");
 
-            //ViewBag.questionContent = question.Content;
-            //ViewBag.questionID = question.QuestionID;
-
         }
         public ActionResult Edit(int id)
         {
-            var listCategory = questionCategorySevice.GetAll();
+            var listCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
             var listLevels = questionService.GetAlLevels();
             ViewBag.listCategory = listCategory;
             ViewBag.listLevel = listLevels;
@@ -265,7 +218,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 ViewBag.Answer = answer;
                 mymodel.Question = question;
                 mymodel.Answers = answer.ToList();
-                //
+
                 if (question == null)
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -291,10 +244,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 answer.IsCorrect = IsCorrect.Contains(AnswerContent[i]);
                 listAnswer.Add(answer);
             }
-            //fix cung
-            question.ModifiedBy = 1;
-            question.CreatedBy = 1;
-            //
+            question.ModifiedBy = int.Parse(Session["Name"].ToString());
             if (Image != null && Image.ContentLength > 0)
             {
                 string filePath = Path.Combine(Server.MapPath("~/Content/QuestionUpload/Images/"),
@@ -324,7 +274,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 }
             }
 
-            return RedirectToAction("Questions");
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetQuestionsByExamPaperId(int examPaperId)

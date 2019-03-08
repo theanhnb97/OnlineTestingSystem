@@ -82,7 +82,25 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
                 return View(category);
             }
         }
-       
+        public JsonResult _CheckCategoryNameAvailableCreate(string userdata)
+        {
+            try
+            {
+                var SeachData = questionCategorySevice.SearchCategories(userdata);
+                if (SeachData.Count() > 0)
+                {
+                    return Json(1);
+                }
+                else
+                {
+                    return Json(0);
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
         public ActionResult EditCategory(int questionCategory)
         {
             var list = questionCategorySevice.GetById(questionCategory);

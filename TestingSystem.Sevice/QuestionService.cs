@@ -17,7 +17,7 @@ namespace TestingSystem.Sevice
         Question FindID(int? id);
         int DeleteQuestion(int id);
         Question GetQuetionById(int id);
-        IEnumerable<Question> SearchByContent(string input);
+        IEnumerable<QuestionDto> SearchByContent(string input, QuestionFilterModel searchModel);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
         IEnumerable<Question> GetAllQuestion();
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
@@ -63,9 +63,9 @@ namespace TestingSystem.Sevice
             return questionRepository.GetById(id);
         }
 
-        public IEnumerable<Question> SearchByContent(string input)
+        public IEnumerable<QuestionDto> SearchByContent(string input, QuestionFilterModel searchModel)
         {
-            return questionRepository.SearchByContent(input);
+            return questionRepository.SearchByContent(input,searchModel);
         }
 
         public bool UpdateQuestion(Question question)

@@ -9,11 +9,6 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
-        /// <summary>
-        /// Fuction Get Question 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         QuestionDto GetQuestionInQuestionDTO(int? id, QuestionFilterModel searchModel);
         string GetNameLevelByQuestionID(int id);
         IEnumerable<Level> GetAlLevels();
@@ -23,7 +18,7 @@ namespace TestingSystem.Data.Repositories
         int DeleteQuestion(int id);
         Question FindID(int? id);
         bool CheckQuestionInExamPaperQuesion(int id);
-        IEnumerable<Question> SearchByContent(string input);
+        IEnumerable<QuestionDto> SearchByContent(string input, QuestionFilterModel searchModel);
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
 
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
@@ -39,13 +34,15 @@ namespace TestingSystem.Data.Repositories
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
         private readonly IQuestionCategoryRepository questionCategory;
+        private readonly IUserRepository userRepository;
         private readonly IExamPaperQuestionRepository examPaperQuestionRepository;
 
 
-        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory, IExamPaperQuestionRepository examPaperQuestionRepository) : base(dbFactory)
+        public QuestionRepository(IDbFactory dbFactory, IQuestionCategoryRepository questionCategory, IExamPaperQuestionRepository examPaperQuestionRepository, IUserRepository userRepository) : base(dbFactory)
         {
             this.questionCategory = questionCategory;
             this.examPaperQuestionRepository = examPaperQuestionRepository;
+            this.userRepository = userRepository;
         }
         public Question FindID(int? id)
         {
@@ -100,11 +97,10 @@ namespace TestingSystem.Data.Repositories
 
             return result;
         }
-        public IEnumerable<Question> SearchByContent(string input)
+        public IEnumerable<QuestionDto> SearchByContent(string input, QuestionFilterModel searchModel)
         {
-            var search = this.DbContext.Questions.OrderByDescending(x => x.QuestionID)
-                .Where(x => x.Content.Contains(input.ToLower().Trim())).ToList();
-            return search;
+            var search = GetAllQuestionDtos(searchModel).Where(x => x.Content.Contains(input)).ToList();
+            return search.AsEnumerable();
         }
 
         public int AddQuestion(Question question)
@@ -125,7 +121,7 @@ namespace TestingSystem.Data.Repositories
                 objQuestion.Level = question.Level;
                 objQuestion.CategoryID = question.CategoryID;
                 objQuestion.IsActive = question.IsActive;
-                objQuestion.CreatedBy = question.CreatedBy;
+                objQuestion.CreatedBy = objQuestion.CreatedBy;
                 objQuestion.CreatedDate = objQuestion.CreatedDate;
                 objQuestion.ModifiedBy = question.ModifiedBy;
                 objQuestion.ModifiedDate = DateTime.Now;
@@ -147,8 +143,10 @@ namespace TestingSystem.Data.Repositories
                     Content = item.Content,
                     Image = item.Image,
                     CreatedBy = item.CreatedBy,
+                    CreatedName = userRepository.GetUserById(item.CreatedBy).Name,
                     CreatedDate = item.CreatedDate,
                     ModifiedBy = item.ModifiedBy,
+                    ModifiedName = userRepository.GetUserById(item.ModifiedBy.GetValueOrDefault()).Name,
                     ModifiedDate = item.ModifiedDate,
                     CategoryID = item.CategoryID,
                     CategoryName = questionCategory.FindCategoryByID(item.CategoryID).Name,

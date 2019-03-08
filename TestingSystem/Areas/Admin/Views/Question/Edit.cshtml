@@ -7,113 +7,32 @@
     var listAnswerByQuestionID = ViewBag.Answer;
     int j = 0;
 }
-
-@*<div class="card">
-        <div class="card-header bg-light">Create Question</div>
-        <div class="card-body">
-            <form action="/Admin/Question/Edit" method="post" enctype="multipart/form-data">
-                @Html.AntiForgeryToken()
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <input type="hidden" value="@Model.QuestionID" name="QuestionID" />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label " style="margin-bottom: 10px;margin-left: 19px;" for="Content">Content Question</label>
-                                <div class="col-md-10">
-                                    <input type="text" name="Content" class="form-control" value="@Model.Content" required />
-                                    <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span>
-                                </div>
-                            </div>
-                            <div class="form-group" style="margin-left: 0px;">
-                                <label for="control-label " style="margin-left: 7px;">Level</label>
-                                <select class="form-control" id="Level" name="Level" required>
-                                    @foreach (var item in ViewBag.listLevel)
-                                    {
-                                        if (Model.Level == item.LevelStep)
-                                        {
-                                            <option selected value="@Model.Level">
-                                                @item.Name
-                                            </option>
-                                        }
-
-                                        if (Model.Level != item.LevelStep)
-                                        {
-                                            <option selected value="@Model.Level">
-                                                @item.Name
-                                            </option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-10">
-                                    <div class="checkbox">
-                                        @Html.EditorFor(model => model.IsActive)
-                                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="control-label ">Category</label>
-                                <select class="form-control" id="CategoryID" name="CategoryID" required>
-                                    @foreach (var item in ViewBag.listCategory)
-                                    {
-
-                                        if (Model.CategoryID == item.CategoryID)
-                                        {
-                                            <option selected value="@Model.CategoryID">
-                                                @item.Name
-                                            </option>
-                                        }
-                                        if (Model.CategoryID != item.CategoryID)
-                                        {
-                                            <option value="@Model.CategoryID">
-                                                @item.Name
-                                            </option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group" style="margin-left: -15px">
-                                <label class="control-label " for="Image" style="margin-right: 50px;margin-bottom: 16px;">Image</label>
-                                <div class="col-md-10">
-                                    <img id="FileImage" src="~/Content/QuestionUpload/Images/@Model.Image" alt="your image" class="img-thumbnail" width="150" />
-                                    <input type="file" name="Image" class="form-control" id="imgInp" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <input type="hidden" value="1" name="CreatedBy" />
-                    <input type="hidden" value="1" name="ModifiedBy" />
-
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Update" class="btn btn-primary" />
-                        <a class="btn btn-info" href="/Admin/Question/Index">Back to List</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>*@
-@*  *@
 <style>
     .card {
         padding-left: 50px;
         padding-right: 50px;
-        /*background-color: papayawhip;*/
+    }
+    #IsActive{
+        margin-left: 6px;
     }
 </style>
+<section class="content-header">
+    <h1>
+        Edit Question
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href=""><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active"><a href="">Question</a> </li>
+        <li class="active"><a href="">Edit</a> </li>
+    </ol>
+    <br />
+    <div class="box">
+        <div class="clearfix"></div>
+    </div>
+</section>
 <div class="card">
-    <div class="card-header bg-light"><h4>Create Question</h4></div>
     <div class="card-body">
-        <form action="/Admin/Question/Edit" method="post" enctype="multipart/form-data">
+        <form action="/Admin/Question/Edit" method="post" enctype="multipart/form-data" onsubmit="return Validate()">
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -121,8 +40,8 @@
                 <div class="form-group">
                     <label class="control-label col-md-2 " style="margin-bottom: 10px" for="Content">Content Question</label>
                     <div class="col-md-10">
-                        <textarea name="Content" id="Content" required>@Model.Content</textarea>
-                        @*<input type="text" name="Content" class="form-control" required/>*@
+                        <textarea name="Content" class="myin" id="Content" required>@Model.Content</textarea>
+                        <span class="check-input" style="color:red;display:none">Please input Content Question!</span>
                         <span class="field-validation-valid text-danger" data-valmsg-for="Content" data-valmsg-replace="true"></span>
                     </div>
                 </div>
@@ -130,13 +49,13 @@
                     <label class="control-label col-md-2 " for="Image">Image</label>
                     <div class="col-md-10">
                         <img id="FileImage" src="~/Content/QuestionUpload/Images/@Model.Image" alt="your image" class="img-thumbnail" width="150" />
-                        <input type="file" name="Image" class="form-control" id="imgInp" style="width: 248px;" />
+                        <input type="file" name="Image" class="form-control" id="imgInp" style="width: 375px;" />
                     </div>
                 </div>
                 <label class="control-label col-md-2" for="Level">Level</label>
                 <div class="col-md-10">
                     <div class="input-group mb-3">
-                        <select class="form-control" id="Level" name="Level" style="margin-left:-9px;width: 248px; margin-bottom: 20px" required>
+                        <select class="form-control myin" id="Level" name="Level" style="margin-left:-9px;width: 375px; margin-bottom: 20px" required>
                             @foreach (var item in ViewBag.listLevel)
                             {
                                 if (Model.Level == item.LevelStep)
@@ -153,12 +72,14 @@
                                 }
                             }
                         </select>
+                        <span class="check-input" style="color:red;display:none">Please input Content Question!</span>
+
                     </div>
                 </div>
                 <label class="control-label col-md-2" for="CategoryID">Category</label>
                 <div class="col-md-10">
                     <div class="input-group mb-3">
-                        <select class="form-control" id="CategoryID" name="CategoryID" style="margin-left: -8px;width: 247px;" required>
+                        <select class="form-control myin" id="CategoryID" name="CategoryID" style="margin-left: -8px;width: 375px; float: left" required>
                             @foreach (var item in ViewBag.listCategory)
                             {
 
@@ -176,13 +97,13 @@
                                 }
                             }
                         </select>
-                        <div class="col-md-2">
-                            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#ModalAddCate" style="margin-left: -14px;">+</button>
-                        </div>
+                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#ModalAddCate" style="">+</button>
+                        <span class="check-input" style="color:red;display:none">Please input Content Question!</span>
+
                     </div>
                 </div>
-                <div class="form-group" style="margin-top: 20px;">
-                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="form-group">
+                        @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <div class="checkbox">
                             @Html.EditorFor(model => model.IsActive)
@@ -192,56 +113,41 @@
                 </div>
             </div>
             <p></p>
-            @*<hr style="border: 1px solid gray;width: 929px"/>*@
-            @*<div><a href="#" id="addNew" style="margin-right:40px; float: right">Add More Aswer</a></div>*@
-            @*<div><input type="button" class="btn btn-success" id="addNew" value="Add More Aswer" style="float: right;margin-right:40px;"/></div>*@
-            <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0" style="margin-left:44px ">
-                <tr>
-                    <th></th>
-                    <th>Answer Content</th>
-                    <th>IsCorrect</th>
-                    <th><input type="button" class="btn btn-success" id="addNew" value="Add More Aswer" style="float: left;margin-right:40px;" /></th>
-                </tr>
-                @*@if (listAnswerByQuestionID != null && listAnswerByQuestionID.count() > 0)*@
-
-
-                @foreach (Answer item in ViewBag.Answer)
-                {
-                    //count++;
-                    <tr style="border:1px solid black">
-                        <td style="text-align: center"><b>Answer</b></td>
-                        <td>
-                            @*@Html.HiddenFor(m => item.AnswerID, new { @class = "form-control" })*@
-                            @*@Html.EditorFor(m => item.AnswerContent, new { @id = "chk1", @class = "chkWebSite", value = "true" })*@
-                            @*<td>@Html.CheckBoxFor(m => item.IsCorrect, new { @id = "chk1", @class = "chkWebSite", value = "true" })</td>*@
-                            <input type="hidden" id="AnswerID" name="AnswerID" value="@item.AnswerID">
-                            <input type="text" id="ck1" name="AnswerContent" value="@item.AnswerContent" onchange="myFunction(this)" class="form-control chkWebSite">
-                        </td>
-                        <td>
-                            <input type="checkbox" id="IsCorrect" checked="@item.IsCorrect" name="IsCorrect" value="@item.AnswerContent" />
-                        </td>
-                        <td>
-                            @if (j > 0)
-                            {
-                                <a href="#" class="remove">Remove</a>
-                                @*<input type="button" class="btn btn-danger remove" value="Remove"/>*@
-                            }
-                        </td>
+           
+            <div class="form-group" style="padding-bottom: 25px;">
+                <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0" style="margin-left:44px ">
+                    <tr>
+                        <th></th>
+                        <th>Answer Content</th>
+                        <th>IsCorrect</th>
+                        <th><input type="button" class="btn btn-success" id="addNew" value="Add More Aswer" style="float: left;margin-right:40px;" /></th>
                     </tr>
-                    j++;
-                }
+                    @foreach (Answer item in ViewBag.Answer)
+                    {
+                        //count++;
+                        <tr style="border:1px solid black">
+                            <td style="text-align: center"><b>Answer</b></td>
+                            <td>             
+                                <input type="hidden" id="AnswerID" name="AnswerID" value="@item.AnswerID">
+                                <input type="text" name="AnswerContent" value="@item.AnswerContent" onchange="myFunction(this)" class="form-control chkWebSite myin">
+                                <span class="check-input" style="color:red;display:none">Please input Content Question!</span>
 
-            </table>
-
-
-            @*<input type="submit" value="Create Answer" />*@
-            @*<input type="hidden" value="1" name="CreatedBy" />
-                <input type="hidden" value="1" name="ModifiedBy" />*@
-            <div class="form-group" style="margin-bottom: 100px">
-                <div class="col-md-2"></div>
-                <div class="col-md-10">
+                            </td>
+                            <td>
+                                <input type="checkbox" id="IsCorrect" checked="@item.IsCorrect" name="IsCorrect" value="@item.AnswerContent" />
+                            </td>
+                            <td>
+                                @if (j > 0)
+                                {
+                                    <a href="#" class="remove">Remove</a>                                }
+                            </td>
+                        </tr>
+                        j++;
+                    }
+                </table>
+                <div style="margin-left: 178px">
                     <input type="submit" value="Update" class="btn btn-primary" />
-                    <a class="btn btn-info" href="/Admin/Question/Questions">Back to List</a>
+                    <a class="btn btn-info" href="/Admin/Question/Index">Back to List</a>
                 </div>
             </div>
         </form>
@@ -356,7 +262,7 @@
             var $trNew = $trLast.clone();
 
             var suffix = $trNew.find(':input:first').attr('name').match(/\d+/);
-            $trNew.find("td:last").html('<a href="javascript:void(0)" class="removeInput">Remove</a>');
+            $trNew.find("td:last").html('<a href="javascript:void(0)" class="remove">Remove</a>');
 
             $.each($trNew.find(':input'), function (i, val) {
                 // Replaced Name
@@ -385,15 +291,13 @@
         // 2. Remove
 
         setTimeout(function () {
-            $("a.removeInput").on("click", function (e) {
+            $("a.remove").on("click", function (e) {
                 debugger;
                 e.preventDefault();
                 $(this).parent().parent().remove();
             });
-
         },
             3000);
-
     });
 </script>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
@@ -417,7 +321,26 @@
 @* change content answer => change value iscorrect tag *@
 <script>
     function myFunction(val) {
-        document.getElementById("IsCorrect").value = val.value; 
+        document.getElementById("IsCorrect").value = val.value;
+    }
+</script>
+<script>
+    function Validate() {
+        var item = document.getElementsByClassName('myin');
+        var item1 = document.getElementsByClassName('check-input');
+        var valid = true;
+        for (var i = 0; i < item.length; i++) {
+            if (item[i].value == "") {
+                item[i].style.border = '1px solid red';
+                item1[i].style.display = 'block';
+                valid = false;
+            }
+            if (item[i].value != "") {
+                item[i].style.border = '1px solid gray';
+                item1[i].style.display = 'none';
+            }
+        }
+        return valid;
     }
 </script>
 

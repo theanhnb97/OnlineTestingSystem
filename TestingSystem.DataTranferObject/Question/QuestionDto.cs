@@ -24,10 +24,12 @@ namespace TestingSystem.DataTranferObject.Question
         public bool IsActive { get; set; }
 
         public int CreatedBy { get; set; }
+        public string CreatedName { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
         public int? ModifiedBy { get; set; }
+        public string ModifiedName { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 

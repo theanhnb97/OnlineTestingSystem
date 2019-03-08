@@ -271,20 +271,9 @@
                     {
                         <li class="active"><a href="/Admin/RoleAction"><i class="fa fa-circle-o"></i>Bảng phân quyền</a></li>
                     }
-                    @if (Action.Contains("ExamPaperExamPapers."))
-                    {
-                        <li><a href="/Admin/ExamPaper/ExamPapers"><i class="fa fa-circle-o"></i>Đề thi</a></li>
-                    }
-                    @if (Action.Contains("QuestionIndex."))
-                    {
-                        <li><a href="/Admin/Question/Index"><i class="fa fa-circle-o"></i>Câu hỏi</a></li>
-                    }
-                    @if (Action.Contains("QuestionCategoryIndex."))
-                    {
-                        <li><a href="/Admin/QuestionCategory/Index"><i class="fa fa-circle-o"></i>Danh mục câu hỏi</a></li>
-                    }
                 </ul>
             </li>
+
             <li class="active treeview">
                 <a href="/Admin/HomeAdmin">
                     <i class="fa fa-user-secret"></i> <span>Quản lí tài khoản</span>
@@ -300,6 +289,28 @@
                     @if (Action.Contains("UserIndex."))
                     {
                         <li class="active"><a href="/Admin/User"><i class="fa fa-circle-o"></i>Tài khoản</a></li>
+                    }
+                </ul>
+            </li>
+            <li class="active treeview">
+                <a href="/Admin/HomeAdmin">
+                    <i class="fa fa-user-secret"></i> <span>Quản lý đề thi</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    @if (Action.Contains("ExamPaperExamPapers."))
+                    {
+                        <li  class="active"><a href="/Admin/ExamPaper/ExamPapers"><i class="fa fa-circle-o"></i>Đề thi</a></li>
+                    }
+                    @if (Action.Contains("QuestionIndex."))
+                    {
+                        <li  class="active"><a href="/Admin/Question/Index"><i class="fa fa-circle-o"></i>Câu hỏi</a></li>
+                    }
+                    @if (Action.Contains("QuestionCategoryIndex."))
+                    {
+                        <li  class="active"><a href="/Admin/QuestionCategory/Index"><i class="fa fa-circle-o"></i>Danh mục câu hỏi</a></li>
                     }
                 </ul>
             </li>

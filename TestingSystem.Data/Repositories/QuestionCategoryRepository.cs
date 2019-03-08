@@ -67,6 +67,12 @@ namespace TestingSystem.Data.Repositories
             return listCategory;
         }
 
+        public IEnumerable<QuestionCategory> GetAllQuestionCategoriesActive()
+        {
+            var listCategory = DbContext.QuestionCategories.Where(x => x.IsActive == true).ToList();
+            return listCategory;
+        }
+
         public IEnumerable<User> GetAllUser()
         {
             return DbContext.Users.ToList();
@@ -116,6 +122,7 @@ namespace TestingSystem.Data.Repositories
         QuestionCategory FindCategoryByID(int? id);
         IEnumerable<QuestionCategory> GetAllQuestionCategories();
         bool QuestionCategoryID(int id);
+        IEnumerable<QuestionCategory> GetAllQuestionCategoriesActive();
 
     }
 }

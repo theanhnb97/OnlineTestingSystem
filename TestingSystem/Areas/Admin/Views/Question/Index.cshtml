@@ -30,12 +30,12 @@
 
             <!-- /.box-header -->
             <div class="box-body">
-                @using (Html.BeginForm("Index", "QuestionCategory", FormMethod.Post))
+                @using (Html.BeginForm("Search", "Question", FormMethod.Post))
                 {
                     <div class="row">
                         <div class="col-md-6" style="margin-bottom:15px">
                             <div class="input-group">
-                                <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
+                                <input type="text" class="form-control" value="" name="keySearch" placeholder="Key Search">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="submit">Search</button>
                                 </span>
@@ -83,7 +83,7 @@
                                         <div class="form-group">
                                             <label for="">Category</label>
                                             <select class="form-control" id="CategoryIDFilter" name="CategoryID">
-                                                <option value="" selected disabled hidden>-Choice one-</option>
+                                                <option value="" selected disabled hidden>--Choice one--</option>
                                                 @if (listCategories != null)
                                                 {
                                                     foreach (var item in listCategories)
@@ -98,7 +98,7 @@
                                         <div class="form-group">
                                             <label for="">Level</label>
                                             <select class="form-control" id="LevelFilter" name="Level">
-                                                <option value="" selected disabled hidden>-Choice one-</option>
+                                                <option value="" selected disabled hidden>--Choice one--</option>
                                                 @if (listLevels != null)
                                                 {
                                                     foreach (var item in listLevels)
@@ -139,7 +139,7 @@
                             {
                                 stt++;
                                 <tr>
-                                    <td><input type="checkbox" id="checkone" name="ids" value="@item.QuestionID"/></td>
+                                    <td><input type="checkbox" id="checkone" name="ids" value="@item.QuestionID"  onchange="changee(this);" /></td>
                                     <td>@stt</td>
                                     <td>
                                         @Html.Raw(HttpUtility.HtmlDecode(@item.Content))
@@ -158,7 +158,7 @@
                                     <td>@item.CategoryName</td>
                                     <td>@item.LevelName</td>
                                     <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
-                                    @*<td>@item.CreatedBy</td>*@
+                                    @*<td>@item.CreatedName</td>*@
                                     <td>@Convert.ToDateTime(@item.CreatedDate).ToString("dd/MM/yyyy")</td>
                                     <td>
                                         <a href='@Url.Action("Edit", "Question", new {id = @item.QuestionID})'>
@@ -225,5 +225,6 @@
         window.location.href = "User?status=" + val.value;
     }
 </script>
+
 
 

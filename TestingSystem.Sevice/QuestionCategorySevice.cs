@@ -54,6 +54,11 @@ namespace TestingSystem.Sevice
             return questionCategory.GetAllQuestionCategories();
         }
 
+        public IEnumerable<QuestionCategory> GetAllQuestionCategoriesActive()
+        {
+            return questionCategory.GetAllQuestionCategoriesActive();
+        }
+
         public IEnumerable<User> GetAllUser()
         {
             return questionCategory.GetAllUser();
@@ -107,5 +112,6 @@ namespace TestingSystem.Sevice
         bool QuestionCategoryID(int id);
 
         IEnumerable<QuestionCategory> SearchCategories(string txtSearch);
+        IEnumerable<QuestionCategory> GetAllQuestionCategoriesActive();
     }
 }
