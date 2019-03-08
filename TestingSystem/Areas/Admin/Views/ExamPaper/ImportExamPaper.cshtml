@@ -1,17 +1,21 @@
 ﻿@{
-    ViewBag.Title = "Import exam paper from excel file";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+                /**/
+
+                ViewBag.Title = "Import exam paper from excel file";
+                Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+
 
 <div class="col-sm-7">
     <p style="font-size:24px">Import exam paper from excel file</p>
+    <a class="group-btn" id="btn-import" href="@Url.Action("ExamPaperTemplateFile","ExamPaper")"><span class="glyphicon glyphicon-save"></span>  Download Template Exam</a>
     <hr />
     <div style="font-size:14px">
         <form class="form-horizontal" action="@Url.Action("ImportExamPaper","ExamPaper")" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label class="col-sm-3">Choose excel file:</label>
                 <div class="col-sm-4">
-                    <input type="file" required name="excelfile" accept=".xlsx, .xls"/>
+                    <input type="file" required name="excelfile" accept=".xlsx, .xls" />
                 </div>
             </div>
 

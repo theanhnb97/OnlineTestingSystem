@@ -15,6 +15,8 @@ namespace TestingSystem.Data.Repositories
         int Edit(ExamPaper examPaper);
         ExamPaper FindById(int id);
         int Delete(int id);
+
+        int GetNumberOfQuestionByExamPaperId(int examPaperId);
     }
 
     public class ExamPaperRepository : RepositoryBase<ExamPaper>, IExamPaperRepository
@@ -157,6 +159,19 @@ namespace TestingSystem.Data.Repositories
             catch (Exception e)
             {
                 e.Message.ToString();
+                throw;
+            }
+        }
+
+        public int GetNumberOfQuestionByExamPaperId(int examPaperId)
+        {
+            try
+            {
+                return DbContext.ExamPaperQuesions.Where(e => e.ExamPaperID == examPaperId).Count();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
                 throw;
             }
         }

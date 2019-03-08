@@ -7162,6 +7162,7 @@
     <Content Include="Scripts\Question\ckeditor\skins\moono-lisa\images\spinner.gif" />
     <Content Include="Scripts\Question\ckeditor\styles.js" />
     <Content Include="TempEmail\Config\Data.xml" />
+    <Content Include="TempEmail\Recovery-mail.html" />
     <Content Include="TempEmail\Verify-mail.html" />
     <Content Include="Views\_Login\Login.cshtml" />
     <Content Include="Assets\AdminLayout\bower_components\bootstrap-colorpicker\.bower.json" />
@@ -7676,8 +7677,6 @@
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="Areas\Admin\Views\ExamPaperQuestion\ExamPaperQuestions.cshtml" />
-    <Content Include="Areas\Admin\Views\ExamPaper\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExportToPdf.cshtml" />
@@ -7722,11 +7721,12 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\_Register\Index.cshtml" />
-    <Content Include="Views\_Account\Register.cshtml" />
     <Content Include="Views\_Account\Verify.cshtml" />
     <Content Include="Views\_Error\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\_Account\Recovery.cshtml" />
+    <Content Include="Views\_Account\Reset.cshtml" />
     <Content Include="Scripts\Question\ckeditor\CHANGES.md" />
     <Content Include="Scripts\Question\ckeditor\LICENSE.md" />
     <Content Include="Scripts\Question\ckeditor\plugins\scayt\CHANGELOG.md" />

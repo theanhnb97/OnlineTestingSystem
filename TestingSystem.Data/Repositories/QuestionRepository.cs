@@ -180,6 +180,18 @@ namespace TestingSystem.Data.Repositories
                 questionDto.CategoryID = question.CategoryID;
                 questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == question.CategoryID).Name;
                 questionDto.ExamPaperQuestionID = item.ExamPaperQuesionID;
+                if (question.Level == 1)
+                {
+                    questionDto.LevelName = "Easy";
+                }
+                else if (question.Level == 2)
+                {
+                    questionDto.LevelName = "Normal";
+                }
+                else
+                {
+                    questionDto.LevelName = "Hard";
+                }
                 questionsDto.Add(questionDto);
             }
             return questionsDto;
@@ -223,6 +235,18 @@ namespace TestingSystem.Data.Repositories
                     questionDto.CategoryID = item.CategoryID;
                     questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == item.CategoryID).Name;
                     questionDto.QuestionID = item.QuestionID;
+                    if (item.Level == 1)
+                    {
+                        questionDto.LevelName = "Easy";
+                    }
+                    else if (item.Level == 2)
+                    {
+                        questionDto.LevelName = "Normal";
+                    }
+                    else
+                    {
+                        questionDto.LevelName = "Hard";
+                    }
                     questionsDto.Add(questionDto);
                 }
             }

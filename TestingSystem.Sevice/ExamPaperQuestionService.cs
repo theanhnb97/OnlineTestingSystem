@@ -20,6 +20,7 @@ namespace TestingSystem.Sevice
         ExamPaperQuesion GetExamPaperQuesionByExamPaperIdAndQuestionId(int examPaperId, int questionId);
 
         IEnumerable<ExamPaperQuesion> GetExamPaperQuestionsByExamPaperId(int examPaperId);
+
     }
     public class ExamPaperQuestionService : IExamPaperQuestionService
     {

@@ -100,12 +100,9 @@
         [HttpPost]
         public ActionResult Create(User user)
         {
-
             user.CreatedDate = DateTime.Now;
             user.UpdatedDate = DateTime.Now;
-            user.Password = Encryptor.MD5Hash(user.Password);
             UserService.AddUser(user);
-
             return RedirectToAction("Index");
         }
 
@@ -163,7 +160,6 @@
         public ActionResult Edit(User user)
         {
             user.UpdatedDate = DateTime.Now;
-            user.Password = Encryptor.MD5Hash(user.Password);
             UserService.EditUser(user);
             return RedirectToAction("Index");
         }

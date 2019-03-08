@@ -19,6 +19,8 @@ namespace TestingSystem.Sevice
         ExamPaper GetExamPaperById(int id);
 
         int Delete(int id);
+
+        int GetNumberOfQuestionByExamPaperId(int examPaperId);
     }
     public class ExamPaperService : IExamPaperService
     {
@@ -32,7 +34,7 @@ namespace TestingSystem.Sevice
 
         public int Create(ExamPaper examPaper)
         {
-           return examPaperRepository.Create(examPaper);
+            return examPaperRepository.Create(examPaper);
         }
 
         public int Edit(ExamPaper examPaper)
@@ -63,7 +65,13 @@ namespace TestingSystem.Sevice
 
         public int Delete(int id)
         {
-           return examPaperRepository.Delete(id);
+            return examPaperRepository.Delete(id);
+        }
+
+
+        public int GetNumberOfQuestionByExamPaperId(int examPaperId)
+        {
+            return examPaperRepository.GetNumberOfQuestionByExamPaperId(examPaperId);
         }
     }
 }

@@ -15,8 +15,10 @@
                         <div class="col-md-4">
                             Question category
                             <select class="form-control" id="CategoryId" name="CategoryId">
-                                <option selected value="149">Public</option>
-                                <option value="50">Draff</option>
+                                <option value="" selected disabled hidden>-Choice one-</option>
+                                <option selected value="149">SQL</option>
+                                <option value="154">JavaScript</option>
+                                <option value="173">PHP</option>
                             </select>
                         </div>
                         <div class="col-md-4">
@@ -91,7 +93,7 @@
                     { "data": "QuestionID", "width" : "3%" },
                     { "data": "Content", "width": "65%" },
                     { "data": "CategoryName", "width": "24%" },
-                    { "data": "Level", "width": "5%" },
+                    { "data": "LevelName", "width": "5%" },
                     {
                         "data": "QuestionID", "width": "3%", "render": function (data) {
                             return '<a class="add-question-row" data-questionid-val="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-plus"></span></a>';
@@ -146,9 +148,9 @@
                             }
 
                         });
-                    }); 
+                    });
 
-            }, 1000);
+            }, 4000);
         });
 
         $('#random').on("click", function () {
