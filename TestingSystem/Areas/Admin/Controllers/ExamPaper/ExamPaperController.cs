@@ -66,6 +66,10 @@
         {
             var examPapers = new List<TestingSystem.Models.ExamPaper>();
             examPapers = examPaperService.GetAll().ToList();
+            foreach (var item in examPapers)
+            {
+                item.NumberOfQuestion = examPaperService.GetNumberOfQuestionByExamPaperId(item.ExamPaperID);
+            }
             return View(examPapers);
         }
 
