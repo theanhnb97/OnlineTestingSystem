@@ -8,7 +8,9 @@
 
 <div class="col-sm-7">
     <p style="font-size:24px">Import exam paper from excel file</p>
-    <a class="group-btn" id="btn-import" href="@Url.Action("ExamPaperTemplateFile","ExamPaper")"><span class="glyphicon glyphicon-save"></span>  Download Template Exam</a>
+    <a href="@Url.Action("ExamPaperTemplateFile","ExamPaper")">
+        <div class="btn btn-success"><span class="glyphicon glyphicon-save"></span>  Download Template Exam</div>
+    </a>
     <hr />
     <div style="font-size:14px">
         <form class="form-horizontal" action="@Url.Action("ImportExamPaper","ExamPaper")" method="post" enctype="multipart/form-data">

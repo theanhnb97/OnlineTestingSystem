@@ -424,7 +424,7 @@
                 examPaper = examPaperService.GetExamPaperById(examPaperId);
                 return new ActionAsPdf("ExportToPdf", new { examPaperId = examPaperId })
                 {
-                    FileName = Server.MapPath(examPaper.Title + ".pdf")
+                    FileName = examPaper.Title + ".pdf"
                 };
             }
             catch (Exception e)

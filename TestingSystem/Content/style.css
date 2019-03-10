@@ -332,3 +332,17 @@ hr {
     padding-bottom: 10px !important;
     padding-top: 10px !important;
 }
+
+#btn-add-question {
+    margin-top: 5px;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+a#export-exam {
+    margin-left: 13px;
+}
+
+    a#export-exam .btn-success {
+        margin-bottom: 8px;
+    }

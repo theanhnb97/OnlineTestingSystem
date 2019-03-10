@@ -75,7 +75,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Rotativa.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rotativa.Core.2.0.2.1\lib\net45\Rotativa.Core.dll</HintPath>
+      <HintPath>..\packages\Rotativa.Core.2.0.0\lib\net45\Rotativa.Core.dll</HintPath>
     </Reference>
     <Reference Include="Rotativa.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rotativa.MVC.2.0.3\lib\net45\Rotativa.MVC.dll</HintPath>
@@ -6755,9 +6755,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Controllers\Content\Site.css" />
-    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
-    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
-    <Content Include="Rotativa\wkhtmltoimage.exe" />
     <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -7675,7 +7672,6 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="App_Browsers\qt.browser" />
     <Content Include="Areas\Admin\Views\ExamPaperQuestion\ExamPaperQuestions.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
@@ -7698,6 +7694,7 @@
     <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Search.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Edit.cshtml" />
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -7749,6 +7746,7 @@
     <Folder Include="Areas\Admin\Models\Account\" />
     <Folder Include="Areas\Admin\Models\Exam-Question\" />
     <Folder Include="Areas\Admin\Models\Exam\" />
+    <Folder Include="FileExcel\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
