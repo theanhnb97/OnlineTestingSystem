@@ -7697,6 +7697,7 @@
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Areas\Admin\Views\Question\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Search.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\Edit.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

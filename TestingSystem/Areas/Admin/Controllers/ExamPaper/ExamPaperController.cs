@@ -62,6 +62,38 @@
             this.questionCategorySevice = questionCategorySevice;
         }
 
+        public ActionResult Index()
+        {
+            var examPapers = new List<TestingSystem.Models.ExamPaper>();
+            examPapers = examPaperService.GetAll().ToList();
+            return View(examPapers);
+        }
+
+        [HttpGet]
+        [ActionName("Edit")]
+        public ActionResult Edit(int? examPaperId)
+        {
+            var model = new Models.ExamPaper();
+            var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
+
+            if (examPaperId == null || examPaperId == 0)
+            {
+                ViewBag.IsUpdate = false;
+                ViewBag.Questions = questions;
+                return View(model);
+            }
+            model = examPaperService.GetExamPaperById(examPaperId.Value);
+            if (model != null)
+            {
+                questions = questionService.GetQuestionsByExamPaperId(examPaperId.Value).ToList();
+                ViewBag.Questions = questions;
+
+            }
+            ViewBag.Status = model.Status;
+            ViewBag.IsUpdate = true;
+            return View(model);
+        }
+
         /// <summary>
         /// The ExamPapers
         /// </summary>

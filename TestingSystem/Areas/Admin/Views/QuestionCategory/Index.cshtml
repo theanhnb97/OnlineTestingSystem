@@ -71,10 +71,10 @@
                                     <td>@item.CreatedBy</td>
                                     <td>@item.CreatedDate</td>
                                     <td>
-                                        <a href='@Url.Action("EditCategory","QuestionCategory", new {questionCategory = @item.CategoryID })'>
+                                        <a href='@Url.Action("Edit","ExamPaper", new {questionCategory = @item.CategoryID })'>
                                             <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
                                         </a>
-                                        <a href='@Url.Action("Delete","QuestionCategory", new {ids = @item.CategoryID })' onclick="return confirm('Are you sure you want to Delete?');">
+                                        <a href='@Url.Action("Delete","ExamPaper", new {ids = @item.CategoryID })' onclick="return confirm('Are you sure you want to delete this exam paper?');">
                                             <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
                                         </a>
                                         @*<div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>*@
@@ -84,7 +84,7 @@
                         </tbody>
 
                     </table>
-                    <a onclick="return confirm('Are you sure you want to Multi Delete?');">
+                    <a onclick="return confirm('Are you sure you want to delete multiple exam paper?');">
                         <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Xóa</button>
                     </a>
                 </form>

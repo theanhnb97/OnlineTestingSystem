@@ -1,0 +1,14 @@
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\TestingSystem.UnitTest.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\TestingSystem.UnitTest.pdb
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csprojAssemblyReference.cache
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csproj.CoreCompileInputs.cache
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csproj.CopyComplete
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.dll
+C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.pdb

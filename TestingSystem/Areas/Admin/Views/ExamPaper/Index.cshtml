@@ -1,8 +1,9 @@
-﻿
+﻿@using TestingSystem.Models
+@model List<ExamPaper>
+
 @{
     ViewBag.Title = "Exam Paper List";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-    int stt = 0;
 }
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -35,57 +36,57 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <a href="@Url.Action("AddCategory","QuestionCategory")">
+                            <a href="@Url.Action("Edit","ExamPaper")">
                                 <div class="btn btn-success">Create</div>
                             </a>
                         </div>
                     </div>
                 }
 
-                <form action="@Url.Action("Delete","QuestionCategory")" id="form-delete" method="post">
+                <form action="@Url.Action("Delete","ExamPaper")" id="form-delete" method="post">
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
                             <tr>
                                 <td width="5%"><input name="all" id="checkall" type="checkbox" onchange="Check(this)" /></td>
-                                <th width="7%">Title</th>
-                                <th>Questions</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                                <th width="12%">CreatedDate</th>
-                                <th width="12%">IsActive</th>
-                                <th width="12%">Action</th>
+                                <th width="53%">Title</th>
+                                <th width="5%">Questions</th>
+                                <th width="5%">Time</th>
+                                <th width="5%">Status</th>
+                                <th width="13%">CreatedDate</th>
+                                <th width="5%">IsActive</th>
+                                <th width="9%">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in ViewBag.ListCategories)
+                            @foreach (var item in Model)
                             {
-                                stt++;
-                                <tr>
-                                    <td><input type="checkbox" id="checkone" name="ids" value="@item.CategoryID" onchange="changee(this);" /></td>
-                                    <td>@stt</td>
-                                    <td>
-                                        @item.Name
-                                    </td>
-                                    <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
-                                    <td>@item.ModifiedBy</td>
-                                    <td>@item.CreatedBy</td>
-                                    <td>@item.CreatedDate</td>
-                                    <td>
-                                        <a href='@Url.Action("EditCategory","QuestionCategory", new {questionCategory = @item.CategoryID })'>
-                                            <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
-                                        </a>
-                                        <a href='@Url.Action("Delete","QuestionCategory", new {ids = @item.CategoryID })' onclick="return confirm('Are you sure you want to Delete?');">
-                                            <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
-                                        </a>
-                                        @*<div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>*@
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td><input type="checkbox" id="checkone" name="ids" value="@item.ExamPaperID" onchange="changee(this);" /></td>
+                                <td>
+                                    @item.Title
+                                </td>
+                                <td>@item.NumberOfQuestion</td>
+                                <td>@item.Time</td>
+                                <td><input type="checkbox" checked="@item.Status" disabled="" /></td>
+                                <td>@item.CreatedDate</td>
+                                <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
+
+                                <td>
+                                    <a href='@Url.Action("Edit","ExamPaper", new {examPaperId = @item.ExamPaperID })'>
+                                        <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
+                                    </a>
+                                    <a href='@Url.Action("Delete","ExamPaper", new {ids = @item.ExamPaperID })' onclick="return confirm('Are you sure you want to delete this exam paper?');">
+                                        <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
+                                    </a>
+                                    @*<div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>*@
+                                </td>
+                            </tr>
                             }
                         </tbody>
 
                     </table>
-                    <a onclick="return confirm('Are you sure you want to Multi Delete?');">
-                        <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Xóa</button>
+                    <a onclick="return confirm('Are you sure you want to delete multiple?');">
+                        <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Delete</button>
                     </a>
                 </form>
             </div>

@@ -26,12 +26,12 @@
                             <input class="form-control" type="text" id="RandomNumber" name="RandomNumber" />
                         </div>
                         <div class="col-md-4">
-                            <button id="random" class="btn btn-primary">Random question</button>
+                            <button id="random" class="btn btn-success">Random question</button>
                         </div>
                     </div>
                     <div>
                         <hr />
-                        <table id="questionTable" class="display" cellspacing="0" width="100%">
+                        <table id="questionTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" name="select_all" value="1" id="question-select-all"></th>
@@ -47,7 +47,7 @@
                 <br />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -82,8 +82,7 @@
             var examPaperId = $('#ExamPaperID').val();
             var questionTable = $('#questionTable').DataTable({
                 "destroy": true,
-
-                //"processing": true,
+                "processing": true,
                 "ajax": {
                     "url": "/Admin/Question/GetQuestionsByQuestionCategoryIdAndExamPaperId/?categoryId=" + categoryId + "&examPaperId=" + examPaperId,
                     "type": "GET",
@@ -133,16 +132,16 @@
                             type: "POST",
                             datatype: "json",
                             error: function (status) {
-                                $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                $("#error-msgbox-modal #error-msg1").text('');
-                                $('#error-msgbox-modal').modal('show');
+                                //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                //$("#error-msgbox-modal #error-msg1").text('');
+                                //$('#error-msgbox-modal').modal('show');
                             },
                             success: function (data) {
                                 if (data.status) {
                                     debugger;
-                                    $.notify("Add question into exam paper successfully!", "success");
+                                    //$.notify("Add question into exam paper successfully!", "success");
                                     $('#questionTable').DataTable().ajax.reload();
-                                    $('#examPaperQuestionTable').DataTable().ajax.reload();
+                                    $('#questionExamTable').DataTable().ajax.reload();
                                 }
                                 //location.reload();
                             }
@@ -150,7 +149,7 @@
                         });
                     });
 
-            }, 4000);
+            }, 8000);
         });
 
         $('#random').on("click", function () {
@@ -164,16 +163,16 @@
                 type: "GET",
                 datatype: "json",
                 error: function (status) {
-                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                    $("#error-msgbox-modal #error-msg1").text('');
-                    $('#error-msgbox-modal').modal('show');
+                    //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                    //$("#error-msgbox-modal #error-msg1").text('');
+                    //$('#error-msgbox-modal').modal('show');
                 },
                 success: function (data) {
                     if (data.status) {
                         debugger;
-                        $.notify("Random question into exam paper successfully!", "success");
+                        //$.notify("Random question into exam paper successfully!", "success");
                         $('#questionTable').DataTable().ajax.reload();
-                        $('#examPaperQuestionTable').DataTable().ajax.reload();
+                        $('#questionExamTable').DataTable().ajax.reload();
                     }
                 }
 
