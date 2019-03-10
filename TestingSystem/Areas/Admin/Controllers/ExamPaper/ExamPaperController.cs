@@ -528,5 +528,13 @@
             Response.BinaryWrite(pck.GetAsByteArray());
             Response.End();
         }
+
+        public ActionResult GetQuestionCategoriesIsActive()
+        {
+            var listCategory = new List<QuestionCategory>();
+            listCategory = questionCategorySevice.GetAllQuestionCategoriesActive().ToList();
+            return Json(new { data = listCategory }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

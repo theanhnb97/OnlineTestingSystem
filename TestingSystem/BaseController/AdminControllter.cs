@@ -53,44 +53,44 @@
         /// <param name="filterContext">The filterContext<see cref="ActionExecutingContext"/></param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            bool havePermision = false;
-            if (Session["Name"] != null)
-            {
-                // Get ID- Role of User
-                int id = int.Parse(Session["Name"].ToString());
-                User myUser = userService.GetUserById(id);
-                ViewBag.Account = myUser.Name;
-                ViewBag.Role = myUser.Roles.RoleName;
+            //bool havePermision = false;
+            //if (Session["Name"] != null)
+            //{
+            //    // Get ID- Role of User
+            //    int id = int.Parse(Session["Name"].ToString());
+            //    User myUser = userService.GetUserById(id);
+            //    ViewBag.Account = myUser.Name;
+            //    ViewBag.Role = myUser.Roles.RoleName;
 
-                // Get List Action-Role true 
-                havePermision = myUser.Roles.RoleName == "Admin";
-                String Action = "";
-                List<RoleAction> myRoleActions = GetAction();
-                foreach (var item in myRoleActions)
-                    Action += item.Action.ActionName + ". ";
-                ViewBag.ListActions = Action;
+            //    // Get List Action-Role true 
+            //    havePermision = myUser.Roles.RoleName == "Admin";
+            //    String Action = "";
+            //    List<RoleAction> myRoleActions = GetAction();
+            //    foreach (var item in myRoleActions)
+            //        Action += item.Action.ActionName + ". ";
+            //    ViewBag.ListActions = Action;
 
-                // Get Curent Action-Controller and check Permision for Action
-                string controller_Action =  
-                    filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString() + "" +
-                    filterContext.Controller.ControllerContext.RouteData.Values["action"].ToString();
+            //    // Get Curent Action-Controller and check Permision for Action
+            //    string controller_Action =  
+            //        filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString() + "" +
+            //        filterContext.Controller.ControllerContext.RouteData.Values["action"].ToString();
 
-                if (Action.Contains(controller_Action))
-                    havePermision = true;
-                if (controller_Action.Contains("_"))
-                    havePermision = true;
+            //    if (Action.Contains(controller_Action))
+            //        havePermision = true;
+            //    if (controller_Action.Contains("_"))
+            //        havePermision = true;
 
 
-                if (havePermision)
-                    base.OnActionExecuting(filterContext);
-                else
-                {
-                    Response.StatusCode = 404;
-                    filterContext.Result = View("Not found");
-                }
-            }
-            else
-                filterContext.Result = RedirectToAction("Index", "Home", new { Area = "" });
+            //    if (havePermision)
+            //        base.OnActionExecuting(filterContext);
+            //    else
+            //    {
+            //        Response.StatusCode = 404;
+            //        filterContext.Result = View("Not found");
+            //    }
+            //}
+            //else
+            //    filterContext.Result = RedirectToAction("Index", "Home", new { Area = "" });
         }
 
         /// <summary>

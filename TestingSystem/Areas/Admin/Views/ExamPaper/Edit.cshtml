@@ -278,6 +278,41 @@
 
 
             $('#btn-add-question').click(function () {
+
+                var categoryId;
+                categoryId = $('#CategoryId').val();
+                if (categoryId === null) {
+                    debugger;
+                    $.ajax({
+                        url: "/Admin/ExamPaper/GetQuestionCategoriesIsActive/",
+                        type: "GET",
+                        data: {
+
+                        },
+                        datatype: "json",
+                        error: function (status) {
+                            debugger;
+                            //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                            //$("#error-msgbox-modal #error-msg1").text('');
+                            //$('#error-msgbox-modal').modal('show');
+                        },
+                        success: function (data) {
+                            $.each(data, function (index, item) {
+                                //ko hieu sao phai viet nhu the nay moi dc
+                                var j = item.length;
+                                for (var i = 0; i < j; i++) {
+                                    debugger;
+                                    $('#CategoryId').append($('<option>', {
+                                        value: item[i].CategoryID,
+                                        text: item[i].Name
+                                    }));
+                                }
+                                $('#CategoryId').val(item[0].CategoryID).trigger('change');
+                            });
+
+                        }
+                    });
+                }
                 $('#basicExampleModal').modal('show');
             });
 

@@ -187,7 +187,5 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
                 return RedirectToAction("Index", "QuestionCategory");
             }
         }
-
-
     }
 }

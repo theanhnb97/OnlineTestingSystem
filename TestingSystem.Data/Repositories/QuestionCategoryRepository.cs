@@ -69,6 +69,7 @@ namespace TestingSystem.Data.Repositories
 
         public IEnumerable<QuestionCategory> GetAllQuestionCategoriesActive()
         {
+            DbContext.Configuration.ProxyCreationEnabled = false;
             var listCategory = DbContext.QuestionCategories.Where(x => x.IsActive == true).ToList();
             return listCategory;
         }
