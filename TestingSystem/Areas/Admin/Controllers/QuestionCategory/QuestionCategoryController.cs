@@ -49,8 +49,8 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
         [HttpPost]
         public ActionResult AddCategory(Models.QuestionCategory category)
         {
-            category.ModifiedBy = 1;
-            category.CreatedBy = 1;
+            category.ModifiedBy = int.Parse(Session["Name"].ToString());
+            category.CreatedBy = int.Parse(Session["Name"].ToString());
             try
             {
                 if (ModelState.IsValid)
@@ -65,7 +65,7 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
                     }
                     else
                     {
-                        category.ModifiedBy = 1;
+                        category.ModifiedBy = int.Parse(Session["Name"].ToString());
                         if (questionCategorySevice.UpdateCategoryQuestion(category) > 0)
                         {
                             Success = "Update exam paper successfully!";
@@ -109,8 +109,8 @@ namespace TestingSystem.Areas.Admin.Controllers.QuestionCategory
         [HttpPost]
         public ActionResult EditCategory(Models.QuestionCategory questionCategory)
         {
-            questionCategory.ModifiedBy = 1;
-            questionCategory.CreatedBy = 1;
+            questionCategory.ModifiedBy = int.Parse(Session["Name"].ToString());
+            questionCategory.CreatedBy = int.Parse(Session["Name"].ToString());
             try
             {
                
