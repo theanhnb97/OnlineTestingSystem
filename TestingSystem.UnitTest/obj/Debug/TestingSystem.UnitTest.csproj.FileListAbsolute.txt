@@ -12,3 +12,17 @@ C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Deb
 C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csproj.CopyComplete
 C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.dll
 C:\Users\Le Duc Hai\Desktop\2\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.pdb
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\TestingSystem.UnitTest.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\TestingSystem.UnitTest.pdb
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csprojAssemblyReference.cache
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csproj.CoreCompileInputs.cache
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.csproj.CopyComplete
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.dll
+D:\CMC\Fresher\Visual\Mock1Official\Mock1Official\OnlineTestingSystem\TestingSystem.UnitTest\obj\Debug\TestingSystem.UnitTest.pdb
