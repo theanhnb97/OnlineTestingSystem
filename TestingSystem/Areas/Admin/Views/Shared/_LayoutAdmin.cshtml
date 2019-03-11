@@ -256,18 +256,18 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @*@if (Action.Contains("ActionIndex."))
-                                {*@
+                            @if (Action.Contains("ActionIndex."))
+                                {
                             <li class="active"><a href="/Admin/Action"><i class="fa fa-circle-o"></i>Thao tác</a></li>
-                            @*}
+                            }
                                 @if (Action.Contains("RoleIndex."))
-                                {*@
+                                {
                             <li class="active"><a href="/Admin/Role"><i class="fa fa-circle-o"></i>Quyền</a></li>
-                            @*}
+                            }
                                 @if (Action.Contains("RoleActionIndex."))
-                                {*@
+                                {
                             <li class="active"><a href="/Admin/RoleAction"><i class="fa fa-circle-o"></i>Bảng phân quyền</a></li>
-                            @*}*@
+                            }
                         </ul>
                     </li>
 
@@ -279,14 +279,14 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @*@if (Action.Contains("GroupIndex."))
-                                {*@
+                            @if (Action.Contains("GroupIndex."))
+                                {
                             <li class="active"><a href="/Admin/Group"><i class="fa fa-circle-o"></i>Nhóm tài khoản</a></li>
-                            @*}
+                            }
                                 @if (Action.Contains("UserIndex."))
-                                {*@
+                                {
                             <li class="active"><a href="/Admin/User"><i class="fa fa-circle-o"></i>Tài khoản</a></li>
-                            @*}*@
+                            }
                         </ul>
                     </li>
                     <li class="active treeview">
@@ -297,18 +297,18 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @*@if (Action.Contains("ExamPaperExamPapers."))
-                                {*@
+                            @if (Action.Contains("ExamPaperExamPapers."))
+                                {
                             <li class="active"><a href="/Admin/ExamPaper/ExamPapers"><i class="fa fa-circle-o"></i>Đề thi</a></li>
-                            @*}
+                            }
                                 @if (Action.Contains("QuestionIndex."))
-                                {*@
+                                {
                             <li class="active"><a href="/Admin/Question/Index"><i class="fa fa-circle-o"></i>Câu hỏi</a></li>
-                            @*}
+                            }
                                 @if (Action.Contains("QuestionCategoryIndex."))
-                                {*@
+                                {
                             <li class="active"><a href="/Admin/QuestionCategory/Index"><i class="fa fa-circle-o"></i>Danh mục câu hỏi</a></li>
-                            @*}*@
+                            }
                         </ul>
                     </li>
                 </ul>
