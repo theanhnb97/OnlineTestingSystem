@@ -62,13 +62,13 @@
                             {
                                 if (Model.Level == item.LevelStep)
                                 {
-                                    <option selected value="@Model.Level">
+                                    <option selected value="@item.LevelStep">
                                         @item.Name
                                     </option>
                                 }
                                 if (Model.Level != item.LevelStep)
                                 {
-                                    <option value="@Model.Level">
+                                    <option value="@item.LevelStep">
                                         @item.Name
                                     </option>
                                 }
