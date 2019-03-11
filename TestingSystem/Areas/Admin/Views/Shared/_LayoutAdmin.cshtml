@@ -256,18 +256,18 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @if (Action.Contains("ActionIndex."))
-                            {
-                                <li class="active"><a href="/Admin/Action"><i class="fa fa-circle-o"></i>Thao tác</a></li>
-                            }
-                            @if (Action.Contains("RoleIndex."))
-                            {
-                                <li class="active"><a href="/Admin/Role"><i class="fa fa-circle-o"></i>Quyền</a></li>
-                            }
-                            @if (Action.Contains("RoleActionIndex."))
-                            {
-                                <li class="active"><a href="/Admin/RoleAction"><i class="fa fa-circle-o"></i>Bảng phân quyền</a></li>
-                            }
+                            @*@if (Action.Contains("ActionIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/Action"><i class="fa fa-circle-o"></i>Thao tác</a></li>
+                            @*}
+                                @if (Action.Contains("RoleIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/Role"><i class="fa fa-circle-o"></i>Quyền</a></li>
+                            @*}
+                                @if (Action.Contains("RoleActionIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/RoleAction"><i class="fa fa-circle-o"></i>Bảng phân quyền</a></li>
+                            @*}*@
                         </ul>
                     </li>
 
@@ -279,14 +279,14 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @if (Action.Contains("GroupIndex."))
-                            {
-                                <li class="active"><a href="/Admin/Group"><i class="fa fa-circle-o"></i>Nhóm tài khoản</a></li>
-                            }
-                            @if (Action.Contains("UserIndex."))
-                            {
-                                <li class="active"><a href="/Admin/User"><i class="fa fa-circle-o"></i>Tài khoản</a></li>
-                            }
+                            @*@if (Action.Contains("GroupIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/Group"><i class="fa fa-circle-o"></i>Nhóm tài khoản</a></li>
+                            @*}
+                                @if (Action.Contains("UserIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/User"><i class="fa fa-circle-o"></i>Tài khoản</a></li>
+                            @*}*@
                         </ul>
                     </li>
                     <li class="active treeview">
@@ -297,18 +297,18 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @if (Action.Contains("ExamPaperExamPapers."))
-                            {
-                                <li class="active"><a href="/Admin/ExamPaper/ExamPapers"><i class="fa fa-circle-o"></i>Đề thi</a></li>
-                            }
-                            @if (Action.Contains("QuestionIndex."))
-                            {
-                                <li class="active"><a href="/Admin/Question/Index"><i class="fa fa-circle-o"></i>Câu hỏi</a></li>
-                            }
-                            @if (Action.Contains("QuestionCategoryIndex."))
-                            {
-                                <li class="active"><a href="/Admin/QuestionCategory/Index"><i class="fa fa-circle-o"></i>Danh mục câu hỏi</a></li>
-                            }
+                            @*@if (Action.Contains("ExamPaperExamPapers."))
+                                {*@
+                            <li class="active"><a href="/Admin/ExamPaper/ExamPapers"><i class="fa fa-circle-o"></i>Đề thi</a></li>
+                            @*}
+                                @if (Action.Contains("QuestionIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/Question/Index"><i class="fa fa-circle-o"></i>Câu hỏi</a></li>
+                            @*}
+                                @if (Action.Contains("QuestionCategoryIndex."))
+                                {*@
+                            <li class="active"><a href="/Admin/QuestionCategory/Index"><i class="fa fa-circle-o"></i>Danh mục câu hỏi</a></li>
+                            @*}*@
                         </ul>
                     </li>
                 </ul>
@@ -497,8 +497,6 @@
         immediately after the control sidebar -->
         <div class="control-sidebar-bg"></div>
     </div>
-    @Html.Partial("_MessageBoxDelete");
-    @Html.Partial("_MessageBoxError");
     <!-- ./wrapper -->
     <!-- jQuery 3 -->
     <script src="~/Assets/AdminLayout/bower_components/jquery/dist/jquery.min.js"></script>
@@ -526,10 +524,9 @@
     <script src="~/Assets/AdminLayout/dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/Assets/AdminLayout/dist/js/demo.js"></script>
-
-
     <script src="~/Assets/AdminLayout/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="~/Assets/AdminLayout/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
     <script>
         $(function () {
             $('#example1').DataTable()
@@ -548,6 +545,24 @@
             });
         })
     </script>
+    @if (TempData["Success"] != null)
+    {
+        <script type="text/javascript">
+            $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
+        </script>
+    }
+
+    @Html.Partial("_MessageBoxError")
+    @if (!string.IsNullOrEmpty((string)TempData["Failure"]))
+    {
+        <script type="text/javascript">
+            // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
+            $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
+            $("#error-msgbox-modal #error-msg1").text('');
+            $('#error-msgbox-modal').modal('show');
+        </script>
+    }
+    @Html.Partial("_MessageBoxDelete");
     @RenderSection("scripts", false)
 </body>
 </html>

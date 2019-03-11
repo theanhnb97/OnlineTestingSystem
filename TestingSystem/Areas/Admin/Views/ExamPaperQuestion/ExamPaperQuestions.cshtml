@@ -184,5 +184,11 @@
             });
 
         });
+
+        document.getElementById("RandomNumber").addEventListener('input', restrictToInteger);
+
+        function restrictToInteger() {
+            this.value = this.value.replace(/[^\d]/g, '');
+        }
     });
 </script>

@@ -62,7 +62,7 @@
             this.questionCategorySevice = questionCategorySevice;
         }
 
-        public ActionResult Index()
+        public ActionResult ExamPapers()
         {
             var examPapers = new List<TestingSystem.Models.ExamPaper>();
             examPapers = examPaperService.GetAll().ToList();
@@ -74,8 +74,8 @@
         }
 
         [HttpGet]
-        [ActionName("Edit")]
-        public ActionResult Edit(int? examPaperId)
+        [ActionName("ExamPaper")]
+        public ActionResult ExamPaper(int? examPaperId)
         {
             var model = new Models.ExamPaper();
             var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
@@ -102,10 +102,10 @@
         /// The ExamPapers
         /// </summary>
         /// <returns>The <see cref="ActionResult"/></returns>
-        public ActionResult ExamPapers()
-        {
-            return View();
-        }
+        //public ActionResult ExamPapers()
+        //{
+        //    return View();
+        //}
 
         /// <summary>
         /// The GetExamPapers
@@ -128,26 +128,26 @@
         /// </summary>
         /// <param name="examPaperId">The examPaperId<see cref="int?"/></param>
         /// <returns>The <see cref="ActionResult"/></returns>
-        [HttpGet]
-        [ActionName("ExamPaper")]
-        public ActionResult ExamPaper(int? examPaperId)
-        {
-            var model = new Models.ExamPaper();
+        //[HttpGet]
+        //[ActionName("ExamPaper")]
+        //public ActionResult ExamPaper(int? examPaperId)
+        //{
+        //    var model = new Models.ExamPaper();
 
-            if (examPaperId == null || examPaperId == 0)
-            {
-                ViewBag.IsUpdate = false;
-                return View(model);
-            }
-            model = examPaperService.GetExamPaperById(examPaperId.Value);
-            if (model != null)
-            {
+        //    if (examPaperId == null || examPaperId == 0)
+        //    {
+        //        ViewBag.IsUpdate = false;
+        //        return View(model);
+        //    }
+        //    model = examPaperService.GetExamPaperById(examPaperId.Value);
+        //    if (model != null)
+        //    {
 
-            }
-            ViewBag.Status = model.Status;
-            ViewBag.IsUpdate = true;
-            return View(model);
-        }
+        //    }
+        //    ViewBag.Status = model.Status;
+        //    ViewBag.IsUpdate = true;
+        //    return View(model);
+        //}
 
         /// <summary>
         /// The ExamPaper

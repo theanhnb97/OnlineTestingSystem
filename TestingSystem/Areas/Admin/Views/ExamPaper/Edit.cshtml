@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <label for="" class="col-sm-2 control-label">Time</label>
                     <div class="col-sm-6">
-                        @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Time, new { htmlAttributes = new { @class = "form-control",@id="time" } })
                         @Html.ValidationMessageFor(model => model.Time, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -322,6 +322,11 @@
                 $('#basicExampleModal').modal('show');
             });
 
+                document.getElementById("time").addEventListener('input', restrictToInteger);
+
+        function restrictToInteger() {
+            this.value = this.value.replace(/[^\d]/g, '');
+        }
 
         });
     </script>

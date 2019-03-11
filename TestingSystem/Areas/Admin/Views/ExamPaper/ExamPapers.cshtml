@@ -1,225 +1,193 @@
-﻿@{
-    ViewBag.Title = "Exam paper list";
+﻿@using TestingSystem.Models
+@model List<ExamPaper>
+
+@{
+
+    ViewBag.Title = "Exam Paper List";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-
-<h4>Exam Paper List</h4>
-<div class="tablecontainer">
-    <div class="button-area">
-        <a class="group-btn" id="btn-add" href="/Admin/ExamPaper/ExamPaper/0"><span class="glyphicon glyphicon-plus"></span>   Add new</a>
-        <a class="group-btn" id="btn-import" href="@Url.Action("ImportExamPaper","ExamPaper")"><span class="glyphicon glyphicon-open"></span>   Import file</a>
-        <a class="btn-delete-all" id="delete-all" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>   Delete all</a>
-    </div>
-
-    <table id="examPaperTable" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th><input type="checkbox" name="select_all" value="1" id="examPaper-select-all"></th>
-                <th>Title</th>
-                <th>Questions</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>CreatedDate</th>
-                <th>IsActive</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-    </table>
-</div>
-
-
-@section scripts
-{
-    @if (TempData["Success"] != null)
-    {
-        <script type="text/javascript">
-    $.notify(@Html.Raw(Json.Encode(TempData["Success"])), "success");
-        </script>
-    }
-
-    @Html.Partial("_MessageBoxError");
-    @if (!string.IsNullOrEmpty((string)TempData["Failure"]))
-    {
-        <script type="text/javascript">
-    // !!!??? chỗ html.raw, ko hiểu sao ko nhận ViewData
-    $("#error-msgbox-modal #error-msg").text(@Html.Raw(Json.Encode(TempData["Failure"])));
-    $("#error-msgbox-modal #error-msg1").text('');
-    $('#error-msgbox-modal').modal('show');
-        </script>
-    }
-
-    @Html.Partial("_MessageBoxDelete");
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-            var examPaperTable = $('#examPaperTable').DataTable({
-                //orderCellsTop: true,
-                //fixedHeader: true,
-
-                "ajax": {
-                    "url": "/Admin/ExamPaper/GetExamPapers",
-                    "type": "GET",
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "ExamPaperID", "width": "3%" },
-                    { "data": "Title", "width": "60%" },
-                    { "data": "NumberOfQuestion", "width": "8%" },
-                    { "data": "Time", "width": "8%" },
-                    {
-                        "data": "Status", "width": "3%", "render": function (data) {
-                            if (data) {
-                                return '<input type="checkbox" disabled checked/>';
-                            }
-                            else {
-                                return '<input type="checkbox" disabled />';
-                            }
-                        }
-                    },
-                    {
-                        "data": "CreatedDate", "width": "6%", "render": function (data) {
-                            return moment(data).format('DD/MM/YYYY');
-                        }
-                    },
-                    {
-                        "data": "IsActive", "width": "7%", "render": function (data) {
-                            if (data) {
-                                return '<input type="checkbox" disabled checked/>';
-                            }
-                            else {
-                                return '<input type="checkbox" disabled />';
-                            }
-                        }
-                    },
-                    {
-                        "data": "ExamPaperID", "width": "5%", "render": function (data) {
-                            return '<a class="update-row" href="/Admin/ExamPaper/ExamPaper/?examPaperId=' + data + '"><span class="glyphicon glyphicon-pencil"></span></a>   <a class="delete-row" data-val-id="' + data + '" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span></a>';
-                        },
-                    }
-                ],
-                'columnDefs': [{
-                    'targets': 0,
-                    'searchable': false,
-                    'orderable': false,
-                    'className': 'dt-body-center',
-                    'render': function (data, type, full, meta) {
-                        return '<input type="checkbox" class="delete-all-checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-                    }
-                }],
-                'order': [[1, 'asc']]
-
-            });
-
-            // Handle click on "Select all" control
-            $('#examPaper-select-all').on('click', function () {
-                // Get all rows with search applied
-                var rows = examPaperTable.rows({ 'search': 'applied' }).nodes();
-                // Check/uncheck checkboxes for all rows in the table
-                $('input[type="checkbox"]', rows).prop('checked', this.checked);
-            });
-
-            // Handle click on checkbox to set state of "Select all" control
-            $('#examPaperTable tbody').on('change', 'input[type="checkbox"]', function () {
-                // If checkbox is not checked
-                if (!this.checked) {
-                    var el = $('#examPaper-select-all').get(0);
-                    // If "Select all" control is checked and has 'indeterminate' property
-                    if (el && el.checked && ('indeterminate' in el)) {
-                        // Set visual state of "Select all" control
-                        // as 'indeterminate'
-                        el.indeterminate = true;
-                    }
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Exam Paper List
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Exam Papers</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="clearfix"></div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                @using (Html.BeginForm("Index", "QuestionCategory", FormMethod.Post))
+                {
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom:15px">
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Search</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="@Url.Action("ExamPaper","ExamPaper")">
+                                <div class="btn btn-success">Create</div>
+                            </a>
+                            <a href="@Url.Action("ImportExamPaper","ExamPaper")">
+                                <div class="btn btn-success"><span class="glyphicon glyphicon-open"></span>  Import exam</div>
+                            </a>
+                        </div>
+                    </div>
                 }
-            });
 
-            $("#delete-all").on("click",
-                function (e) {
-                    var data = examPaperTable.$('input.delete-all-checkbox:checkbox:checked');
-                    debugger;
-                    if (data.length === 0) {
-                        $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
-                        $("#error-msgbox-modal #error-msg1").text('');
-                        $('#error-msgbox-modal').modal('show');
-                    } else {
-                        var ids = [];
-                        $.each(data, function (index, elem) {
-                            var rowId = $(elem).val();
-                            if (ids.indexOf(rowId) < 0) {
-                                ids.push(rowId);
-                            }
-                        });
-                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
-                            $.ajax({
-                                url: "/Admin/ExamPaper/Delete/",
-                                data: {
-                                    ids: ids
-                                },
-                                type: "Get",
-                                datatype: "json",
-                                traditional: true,
-                                error: function (data) {
-                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                    $("#error-msgbox-modal #error-msg1").text('');
-                                    $('#error-msgbox-modal').modal('show');
-                                },
-                                success: function (data) {
-                                    if (data.status) {
-                                        debugger;
-                                        $.notify("Delete exam paper successfully!", "success");
-                                        //examPaperTable.ajax.reload();
-                                    }
-                                    location.reload();
-                                }
+                @*<form action="@Url.Action("Delete","ExamPaper")" id="form-delete" method="post">*@
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td width="5%"><input name="all" id="checkall" type="checkbox" onchange="Check(this)" /></td>
+                            <th width="53%">Title</th>
+                            <th width="5%">Questions</th>
+                            <th width="5%">Time</th>
+                            <th width="5%">Status</th>
+                            <th width="13%">CreatedDate</th>
+                            <th width="5%">IsActive</th>
+                            <th width="9%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="checkone" name="ids" value="@item.ExamPaperID" onchange="changee(this);" /></td>
+                                <td>
+                                    @item.Title
+                                </td>
+                                <td>@item.NumberOfQuestion</td>
+                                <td>@item.Time</td>
+                                <td><input type="checkbox" checked="@item.Status" disabled="" /></td>
+                                <td>@item.CreatedDate</td>
+                                <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
 
-                            });
-                            e.stopPropagation();
-                        });
-                    }
-
-                });
-
-            setTimeout(function () {
-
-                $(".delete-row").on("click",
-                    function (e) {
-                        var ids = [];
-                        var id = $(this).data("val-id");
-                        if (ids.indexOf(id) < 0) {
-                            ids.push(id);
+                                <td>
+                                    <a href='@Url.Action("ExamPaper","ExamPaper", new {examPaperId = @item.ExamPaperID })'>
+                                        <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
+                                    </a>
+                                    <a href='@Url.Action("Delete","ExamPaper", new {ids = @item.ExamPaperID })' onclick="return confirm('Are you sure you want to delete this exam paper?');">
+                                        <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
+                                    </a>
+                                    @*<div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>*@
+                                </td>
+                            </tr>
                         }
+                    </tbody>
 
-                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
-                            $.ajax({
-                                url: "/Admin/ExamPaper/Delete/",
-                                data: {
-                                    ids: ids
-                                },
-                                traditional: true,
-                                type: "Get",
-                                datatype: "json",
-                                error: function (status) {
-                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                    $("#error-msgbox-modal #error-msg1").text('');
-                                    $('#error-msgbox-modal').modal('show');
-                                },
-                                success: function (data) {
-                                    if (data.status) {
-                                        debugger;
-                                        $.notify("Delete exam paper successfully!", "success");
-                                        //examPaperTable.ajax.reload();
-                                    }
-                                    location.reload();
-                                }
+                </table>
+                <a id="delete-multiple">
+                    <button type="submit" class="btn btn-danger" id="btn-delete-multiple" disabled>Delete</button>
+                </a>
+                @*</form>*@
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
 
-                            });
-                            e.stopPropagation();
-                        });
+    </div>
+    <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+<script language="JavaScript">
+    function Check(source) {
+        checkboxes = document.getElementsByName('ids');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            checkboxes[i].checked = source.checked;
+        }
+        if (source.checked == true)
+            document.getElementById("btn-delete-multiple").disabled = false;
+        else
+            document.getElementById("btn-delete-multiple").disabled = true;
+    }
+
+    function changee(id) {
+        var j = 0;
+        checkboxes = document.getElementsByName('ids');
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            if (checkboxes[i].checked == true)
+                j = 1;
+        }
+        if (j == 1) {
+            document.getElementById("btn-delete-multiple").disabled = false;
+        }
+        else {
+            document.getElementById("btn-delete-multiple").disabled = true;
+        }
+    }
+    function reload(val) {
+        window.location.href = "User?filter=" + val.value;
+    }
+    function status(val) {
+        window.location.href = "User?status=" + val.value;
+    }
+</script>
+@section scripts{
+    <script>
+        $(document).ready(function(){
+            $("#delete-multiple").on("click",
+            function (e) {
+                var data = $('#example2').DataTable().$('input.checkone:checkbox:checked');
+                debugger;
+                if (data.length === 0) {
+                    //$("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
+                    //$("#error-msgbox-modal #error-msg1").text('');
+                    //$('#error-msgbox-modal').modal('show');
+                } else {
+                    var ids = [];
+                    $.each(data, function (index, elem) {
+                        var rowId = $(elem).val();
+                        if (ids.indexOf(rowId) < 0) {
+                            ids.push(rowId);
+                        }
                     });
+                    debugger;
+                    $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                        $.ajax({
+                            url: "/Admin/ExamPaper/Delete/",
+                            data: {
+                                ids: ids
+                            },
+                            type: "Get",
+                            datatype: "json",
+                            traditional: true,
+                            error: function (data) {
+                                //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                //$("#error-msgbox-modal #error-msg1").text('');
+                                //$('#error-msgbox-modal').modal('show');
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    debugger;
+                                    //$.notify("Delete question successfully!", "success");
+                                    //examPaperQuestionTable.ajax.reload();
+                                }
+                                location.reload();
+                            }
 
-            }, 500);
+                        });
+                        e.stopPropagation();
+                    });
+                }
+
+            });
         });
     </script>
 }
-
 
 

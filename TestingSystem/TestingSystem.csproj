@@ -6759,6 +6759,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\myjquery.js" />
+    <Content Include="Scripts\notify.min.js" />
     <Content Include="Scripts\Question\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\Question\ckeditor\build-config.js" />
     <Content Include="Scripts\Question\ckeditor\ckeditor.js" />
