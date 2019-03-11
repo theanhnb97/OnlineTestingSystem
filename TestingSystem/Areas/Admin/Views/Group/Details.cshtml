@@ -1,4 +1,5 @@
-﻿@model TestingSystem.Models.Group
+﻿@using TestingSystem.Models
+@model TestingSystem.Models.Group
 @{
     ViewBag.Title = "Detail";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
@@ -61,19 +62,19 @@
             </div><!-- /.box-footer -->
         </form>
         <div class="box-header">
-            <p>Số lượng thành viên: @ViewBag.Count</p>
+            <p>Number of User: @ViewBag.Count</p>
         </div>
         <table id="example2" class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Họ tên</th>
-                    <th>Tài khoản</th>
-                    <th>Quyền</th>
+                    <th>Name Group</th>
+                    <th>Email</th>
+                    <th>Role</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in ViewBag.listUserInGroup)
+                @foreach (User item in ViewBag.listUserInGroup)
                 {
                     i++;
                     <tr>
@@ -82,7 +83,7 @@
                             @item.Name
                         </td>
                         <td>@item.UserName</td>
-                        <td>@item.RoleId</td>
+                        <td>@item.Roles.RoleName</td>
                     </tr>
                 }
 

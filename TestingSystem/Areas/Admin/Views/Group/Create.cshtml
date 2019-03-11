@@ -8,15 +8,15 @@
         Thêm Nhóm
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-        <li><a href="#">Nhóm</a></li>
-        <li class="active">Thêm mới</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Group</a></li>
+        <li class="active">Add Group</li>
     </ol>
 </section>
 <section class="content">
     <div class="box box-info">
         <div class="box-header with-border">
-            <h3 class="box-title">Thêm mới</h3>
+            <h3 class="box-title">Add Group</h3>
         </div><!-- /.box-header -->
         <!-- form start -->
         @using (Html.BeginForm())
@@ -47,14 +47,14 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <button type="submit" class="btn-sm btn-primary" style="border: none;" id="btnsub2">
-                            Thêm mới
+                            Add
                         </button>
                     </div>
                 </div>
             </div>
         }
     </div><!-- /.box -->
-    <a href="@Url.Action("Index")"><button class="btn btn-success">Trở lại</button></a>
+    <a href="@Url.Action("Index")"><button class="btn btn-success">Back</button></a>
 </section>
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryval")
