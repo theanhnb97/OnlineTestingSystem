@@ -96,47 +96,47 @@
             <!-- /.box-header -->
             <div class="box-body">
 
-                <form action="@Url.Action("Delete","ExamPaperQuestion")" id="form-delete" method="post">
-                    <table id="questionExamTable" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <td width="5%"><input name="all" id="checkall" type="checkbox" onchange="Check(this)" /></td>
-                                <th width="65%">Content</th>
-                                <th width="15%">Category</th>
-                                <th width="5%">Level</th>
-                                <th width="5%">IsActive</th>
-                                <th width="5%">Action</th>
-                            </tr>
-                        </thead>
-                        @*<tbody>
-                                @foreach (var item in questions)
-                                {
-                                    <tr>
-                                        <td><input type="checkbox" id="checkone" name="ids" value="@item.ExamPaperQuestionID" onchange="changee(this);" /></td>
-                                        <td>
-                                            @item.Content
-                                        </td>
-                                        <td>@item.CategoryName</td>
-                                        <td>@item.LevelName</td>
-                                        <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
+                @*<form action="@Url.Action("Delete","ExamPaperQuestion")" id="form-delete" method="post">*@
+                <table id="questionExamTable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td width="5%"><input name="all" id="checkall" type="checkbox" onchange="Check(this)" /></td>
+                            <th width="65%">Content</th>
+                            <th width="15%">Category</th>
+                            <th width="5%">Level</th>
+                            <th width="5%">IsActive</th>
+                            <th width="5%">Action</th>
+                        </tr>
+                    </thead>
+                    @*<tbody>
+                @foreach (var item in questions)
+                {
+                    <tr>
+                        <td><input type="checkbox" id="checkone" name="ids" value="@item.ExamPaperQuestionID" onchange="changee(this);" /></td>
+                        <td>
+                            @item.Content
+                        </td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.LevelName</td>
+                        <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
 
-                                        <td>
-                                            <a href="javascript:void(0)" class="remove-question-exam" data-val-id="@item.ExamPaperQuestionID">
-                                                <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>*@
+                        <td>
+                            <a href="javascript:void(0)" class="remove-question-exam" data-val-id="@item.ExamPaperQuestionID">
+                                <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>*@
 
-                    </table>
-                    <a onclick="return confirm('Are you sure you want to delete multiple?');">
-                        @if (isUpdate)
-                        {
-                            <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Delete</button>
-                        }
-                    </a>
-                </form>
+                </table>
+                <a id="delete-multiple">
+                    @if (isUpdate)
+                    {
+                        <button type="submit" class="btn btn-danger" id="btn-delete-multiple" disabled>Delete</button>
+                    }
+                </a>
+                @*</form>*@
             </div>
         </div>
     </div>
@@ -150,9 +150,9 @@
             checkboxes[i].checked = source.checked;
         }
         if (source.checked == true)
-            document.getElementById("btn-delete").disabled = false;
+            document.getElementById("btn-delete-multiple").disabled = false;
         else
-            document.getElementById("btn-delete").disabled = true;
+            document.getElementById("btn-delete-multiple").disabled = true;
     }
 
     function changee(id) {
@@ -163,10 +163,10 @@
                 j = 1;
         }
         if (j == 1) {
-            document.getElementById("btn-delete").disabled = false;
+            document.getElementById("btn-delete-multiple").disabled = false;
         }
         else {
-            document.getElementById("btn-delete").disabled = true;
+            document.getElementById("btn-delete-multiple").disabled = true;
         }
     }
 </script>
@@ -222,7 +222,7 @@
                 'orderable': false,
                 'className': 'dt-body-center',
                 'render': function (data, type, full, meta) {
-                    return '<input type="checkbox" class="delete-all-checkbox"  onchange="changee(this);" name="ids" value="' + $('<div/>').text(data).html() + '">';
+                    return '<input type="checkbox" class="checkone"  onchange="changee(this);" name="ids" value="' + $('<div/>').text(data).html() + '">';
                 }
             }],
             'order': [[1, 'asc']]
@@ -260,6 +260,53 @@
                     e.stopPropagation();
                 });
             });
+
+
+            $("#delete-multiple").on("click",
+                function (e) {
+                    var data = $('#questionExamTable').DataTable().$('input.checkone:checkbox:checked');
+                    debugger;
+                    if (data.length === 0) {
+                        $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
+                        $("#error-msgbox-modal #error-msg1").text('');
+                        $('#error-msgbox-modal').modal('show');
+                    } else {
+                        var ids = [];
+                        $.each(data, function (index, elem) {
+                            var rowId = $(elem).val();
+                            if (ids.indexOf(rowId) < 0) {
+                                ids.push(rowId);
+                            }
+                        });
+                        debugger;
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/ExamPaperQuestion/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                type: "Get",
+                                datatype: "json",
+                                traditional: true,
+                                error: function (data) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (data) {
+                                    if (data.status) {
+                                        debugger;
+                                        $.notify("Delete questions successfully!", "success");
+                                        examPaperQuestionTable.ajax.reload();
+                                        //location.reload();
+                                    }
+                                }
+                            });
+                            e.stopPropagation();
+                        });
+                    }
+                });
+
 
             $('#btn-add-question').click(function () {
 

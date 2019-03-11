@@ -169,9 +169,9 @@
                                 success: function (data) {
                                     if (data.status) {
                                         debugger;
-                                        $.notify("Delete exam paper successfully!", "success");
+                                        location.reload();                            
                                         //examPaperQuestionTable.ajax.reload();
-                                        location.reload();
+
                                     }
                                 }
                             });
@@ -204,8 +204,6 @@
                         success: function (data) {
                             if (data.status) {
                                 debugger;
-                                $.notify("Delete exam paper successfully!", "success");
-                                //examPaperQuestionTable.ajax.reload();
                                 location.reload();
                             }
                         }

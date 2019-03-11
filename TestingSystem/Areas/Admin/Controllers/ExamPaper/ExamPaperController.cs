@@ -519,7 +519,7 @@
 
 
 
-            var listQuestionCategory = questionCategorySevice.GetAll();
+            var listQuestionCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
             foreach (var item in listQuestionCategory)
             {
                 category.Formula.Values.Add(item.Name);
