@@ -24,24 +24,24 @@
             <!-- /.box-header -->
             <div class="box-body">
                 @using (Html.BeginForm("Index", "QuestionCategory", FormMethod.Post))
-                    {
-                        <div class="row">
-                            <div class="col-md-6" style="margin-bottom:15px">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="submit">Search</button>
-                                    </span>
-                                </div> 
-                            </div>
-                            <div class="col-md-6">
-                                <a href="@Url.Action("AddCategory","QuestionCategory")">
-                                    <div class="btn btn-success">Create</div>
-                                </a>
+                {
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom:15px">
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="" name="KeySearch" id="KeySearch" onclick="get_content()" placeholder="Key Search">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" id="searchText" type="submit">Search</button>
+                                </span>
                             </div>
                         </div>
-                    }
-             
+                        <div class="col-md-6">
+                            <a href="@Url.Action("AddCategory","QuestionCategory")">
+                                <div class="btn btn-success">Create</div>
+                            </a>
+                        </div>
+                    </div>
+                }
+
                 <form action="@Url.Action("Delete","QuestionCategory")" id="form-delete" method="post">
                     <table id="example2" class="table table-bordered table-hover">
                         <thead>
@@ -67,14 +67,14 @@
                                         @item.Name
                                     </td>
                                     <td><input type="checkbox" checked="@item.IsActive" disabled="" /></td>
-                                    <td>@item.ModifiedBy</td>
-                                    <td>@item.CreatedBy</td>
+                                    <td>@item.ModifiedBys.Name</td>
+                                    <td>@item.CreatedBys.Name</td>
                                     <td>@item.CreatedDate</td>
                                     <td>
-                                        <a href='@Url.Action("Edit","ExamPaper", new {questionCategory = @item.CategoryID })'>
+                                        <a href='@Url.Action("EditCategory","QuestionCategory", new {questionCategory = @item.CategoryID })'>
                                             <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
                                         </a>
-                                        <a href='@Url.Action("Delete","ExamPaper", new {ids = @item.CategoryID })' onclick="return confirm('Are you sure you want to delete this exam paper?');">
+                                        <a href='@Url.Action("Delete","QuestionCategory", new {ids = @item.CategoryID })' onclick="return confirm('Are you sure you want to delete this exam paper?');">
                                             <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
                                         </a>
                                         @*<div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>*@
@@ -131,6 +131,10 @@
     function status(val) {
         window.location.href = "User?status=" + val.value;
     }
+
+
+
+
 </script>
 
 

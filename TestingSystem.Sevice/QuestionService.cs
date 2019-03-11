@@ -21,7 +21,7 @@ namespace TestingSystem.Sevice
         IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel);
         IEnumerable<Question> GetAllQuestion();
         IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId);
-        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId);
+        IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId);
         IEnumerable<QuestionDto> RandomQuestionsByCategoryIdAndExamPaperIdAndNumber(int categoryId, int examPaperId, int number);
         IEnumerable<Answer> GetAnswersByQuestionId(int? id);
         IEnumerable<Question> GetAllQuestions();
@@ -65,7 +65,7 @@ namespace TestingSystem.Sevice
 
         public IEnumerable<QuestionDto> SearchByContent(string input, QuestionFilterModel searchModel)
         {
-            return questionRepository.SearchByContent(input,searchModel);
+            return questionRepository.SearchByContent(input, searchModel);
         }
 
         public bool UpdateQuestion(Question question)
@@ -83,9 +83,9 @@ namespace TestingSystem.Sevice
             return questionRepository.GetQuestionsByExamPaperId(examPaperId);
         }
 
-        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId,int examPaperId)
+        public IEnumerable<QuestionDto> GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
-            return questionRepository.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId,examPaperId);
+            return questionRepository.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId, examPaperId);
         }
 
         public IEnumerable<Level> GetAlLevels()
@@ -114,7 +114,7 @@ namespace TestingSystem.Sevice
 
         public QuestionDto GetQuestionInQuestionDTO(int? id, QuestionFilterModel searchModel)
         {
-            return questionRepository.GetQuestionInQuestionDTO(id, searchModel);
+            return questionRepository.GetQuestionInQuestionDto(id, searchModel);
         }
 
         public IQueryable<QuestionDto> GetAllQuestionDtos(QuestionFilterModel searchModel)

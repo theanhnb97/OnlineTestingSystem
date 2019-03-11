@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TestingSystem.Data.Infrastructure;
@@ -9,7 +10,7 @@ namespace TestingSystem.Data.Repositories
 {
     public interface IQuestionRepository : IRepository<Question>
     {
-        QuestionDto GetQuestionInQuestionDTO(int? id, QuestionFilterModel searchModel);
+        QuestionDto GetQuestionInQuestionDto(int? id, QuestionFilterModel searchModel);
         string GetNameLevelByQuestionID(int id);
         IEnumerable<Level> GetAlLevels();
         IQueryable<QuestionDto> GetAllQuestionDtos(QuestionFilterModel searchModel);
@@ -33,6 +34,7 @@ namespace TestingSystem.Data.Repositories
     }
     public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IQuestionCategoryRepository questionCategory;
         private readonly IUserRepository userRepository;
         private readonly IExamPaperQuestionRepository examPaperQuestionRepository;
@@ -46,117 +48,196 @@ namespace TestingSystem.Data.Repositories
         }
         public Question FindID(int? id)
         {
-            var question = this.DbContext.Questions.SingleOrDefault(x => x.QuestionID == id);
-            return question;
+            try
+            {
+                var question = this.DbContext.Questions.SingleOrDefault(x => x.QuestionID == id);
+                return question;
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return null;//
+            }
         }
         public int DeleteQuestion(int id)
         {
-            if (CheckQuestionInExamPaperQuesion(id) == false)
+            try
             {
-                var question = this.DbContext.Questions.Find(id);
-                if (question != null)
+                if (CheckQuestionInExamPaperQuesion(id) == false)
                 {
-                    this.DbContext.Questions.Remove(question);
-                    return DbContext.SaveChanges();
+                    var question = this.DbContext.Questions.Find(id);
+                    if (question != null)
+                    {
+                        this.DbContext.Questions.Remove(question);
+                        return DbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
                 else
                 {
                     return 0;
                 }
             }
-            else
+            catch (Exception e)
             {
+                log.Debug(e.Message);
                 return 0;
             }
+
 
         }
 
         public IQueryable<Question> FilterQuestions(QuestionFilterModel searchModel)
         {
             var result = this.DbContext.Questions.AsQueryable();
-            if (searchModel != null)
+            try
             {
-                if (searchModel.QuestionID.HasValue)
-                    result = result.Where(x => x.QuestionID == searchModel.QuestionID);
+                if (searchModel != null)
+                {
+                    if (searchModel.QuestionID.HasValue)
+                        result = result.Where(x => x.QuestionID == searchModel.QuestionID);
 
-                if (!string.IsNullOrEmpty(searchModel.Content))
-                    result = result.Where(x => x.Content.Contains(searchModel.Content));
+                    if (!string.IsNullOrEmpty(searchModel.Content))
+                        result = result.Where(x => x.Content.Contains(searchModel.Content));
 
-                if (searchModel.Level.HasValue)
-                    result = result.Where(x => x.Level == searchModel.Level);
+                    if (searchModel.Level.HasValue)
+                        result = result.Where(x => x.Level == searchModel.Level);
 
-                if (searchModel.CategoryID.HasValue)
-                    result = result.Where(x => x.CategoryID == searchModel.CategoryID);
+                    if (searchModel.CategoryID.HasValue)
+                        result = result.Where(x => x.CategoryID == searchModel.CategoryID);
 
-                if (searchModel.CreatedBy.HasValue)
-                    result = result.Where(x => x.CreatedBy == searchModel.CreatedBy);
+                    if (!string.IsNullOrEmpty(searchModel.CreatedBy))
+                    {
+                        var user = DbContext.Users.SingleOrDefault(x => x.Name == searchModel.CreatedBy);
+                        if (user != null)
+                        {
+                            result = result.Where(x => x.CreatedBy == user.UserId);
+                        }
+                        else
+                        {
+                            result = null;
+                        }
+                    }
+                    if (searchModel.FromDate.HasValue)
+                    {
+                        result = result.Where(x => x.CreatedDate > searchModel.FromDate && x.CreatedDate < searchModel.ToDate);
+                    }
+                }
 
-                if (searchModel.CreatedDate.HasValue)
-                    result = result.Where(x => x.CreatedDate == searchModel.CreatedDate);
+                return result;
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return result;
             }
 
-            return result;
         }
         public IEnumerable<QuestionDto> SearchByContent(string input, QuestionFilterModel searchModel)
         {
-            var search = GetAllQuestionDtos(searchModel).Where(x => x.Content.Contains(input)).ToList();
-            return search.AsEnumerable();
+            try
+            {
+                var search = GetAllQuestionDtos(searchModel).Where(x => x.Content.Contains(input)).ToList();
+                return search.AsEnumerable();
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                throw;
+            }
+
         }
 
         public int AddQuestion(Question question)
         {
-            question.CreatedDate = DateTime.Now;
-            DbContext.Questions.Add(question);
-            DbContext.SaveChanges();
-            return question.QuestionID;
+            try
+            {
+                question.CreatedDate = DateTime.Now;
+                DbContext.Questions.Add(question);
+                DbContext.SaveChanges();
+                return question.QuestionID;
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return 0;//
+            }
+
         }
 
         public bool UpdateQuestion(Question question)
         {
-            var objQuestion = this.DbContext.Questions.Find(question.QuestionID);
-            if (objQuestion != null)
+            try
             {
-                objQuestion.Content = question.Content;
-                objQuestion.Image = question.Image;
-                objQuestion.Level = question.Level;
-                objQuestion.CategoryID = question.CategoryID;
-                objQuestion.IsActive = question.IsActive;
-                objQuestion.CreatedBy = objQuestion.CreatedBy;
-                objQuestion.CreatedDate = objQuestion.CreatedDate;
-                objQuestion.ModifiedBy = question.ModifiedBy;
-                objQuestion.ModifiedDate = DateTime.Now;
-                this.DbContext.SaveChanges();
-                return true;
+                var objQuestion = this.DbContext.Questions.Find(question.QuestionID);
+                if (objQuestion != null)
+                {
+                    objQuestion.Content = question.Content;
+                    objQuestion.Image = question.Image;
+                    objQuestion.Level = question.Level;
+                    objQuestion.CategoryID = question.CategoryID;
+                    objQuestion.IsActive = question.IsActive;
+                    objQuestion.CreatedBy = objQuestion.CreatedBy;
+                    objQuestion.CreatedDate = objQuestion.CreatedDate;
+                    objQuestion.ModifiedBy = question.ModifiedBy;
+                    objQuestion.ModifiedDate = DateTime.Now;
+                    this.DbContext.SaveChanges();
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return false;
+            }
+
         }
 
         public IQueryable<QuestionDto> GetAllQuestionDtos(QuestionFilterModel searchModel)
         {
-            var listQuestionDTOs = new List<QuestionDto>();
-            foreach (var item in FilterQuestions(searchModel))
+            var listQuestionDtos = new List<QuestionDto>();
+            try
             {
-                listQuestionDTOs.Add(new QuestionDto
+                if (FilterQuestions(searchModel) != null)
                 {
-                    QuestionID = item.QuestionID,
-                    IsActive = item.IsActive,
-                    Content = item.Content,
-                    Image = item.Image,
-                    CreatedBy = item.CreatedBy,
-                    CreatedName = userRepository.GetUserById(item.CreatedBy).Name,
-                    CreatedDate = item.CreatedDate,
-                    ModifiedBy = item.ModifiedBy,
-                    ModifiedName = userRepository.GetUserById(item.ModifiedBy.GetValueOrDefault()).Name,
-                    ModifiedDate = item.ModifiedDate,
-                    CategoryID = item.CategoryID,
-                    CategoryName = questionCategory.FindCategoryByID(item.CategoryID).Name,
-                    Level = item.Level,
-                    LevelName = GetNameLevelByQuestionID(item.QuestionID)
-                });
+                    foreach (var item in FilterQuestions(searchModel))
+                    {
+                        listQuestionDtos.Add(new QuestionDto
+                        {
+                            QuestionID = item.QuestionID,
+                            IsActive = item.IsActive,
+                            Content = item.Content,
+                            Image = item.Image,
+                            CreatedBy = item.CreatedBy,
+                            CreatedName = userRepository.GetUserById(item.CreatedBy).Name,
+                            CreatedDate = item.CreatedDate,
+                            ModifiedBy = item.ModifiedBy,
+                            ModifiedName = userRepository.GetUserById(item.ModifiedBy.GetValueOrDefault()).Name,
+                            ModifiedDate = item.ModifiedDate,
+                            CategoryID = item.CategoryID,
+                            CategoryName = questionCategory.FindCategoryByID(item.CategoryID).Name,
+                            Level = item.Level,
+                            LevelName = GetNameLevelByQuestionID(item.QuestionID)
+                        });
+                    }
+                }
+                else
+                {
+                    //listQuestionDtos = null;
+                }
+                var listQuestion = listQuestionDtos.AsQueryable();
+                return listQuestion.OrderByDescending(x => x.CreatedDate);
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return listQuestionDtos.AsQueryable();
             }
 
-            var listQuestion = listQuestionDTOs.AsQueryable();
-            return listQuestion.OrderByDescending(x => x.CreatedDate);
         }
 
         public IEnumerable<QuestionDto> GetQuestionsByExamPaperId(int examPaperId)
@@ -167,32 +248,32 @@ namespace TestingSystem.Data.Repositories
             foreach (var item in examPaperQuestions)
             {
                 var question = new Question();
-                var questionDto = new QuestionDto();
+                var QuestionDto = new QuestionDto();
                 question = DbContext.Questions.SingleOrDefault(e => e.QuestionID == item.QuestionID);
-                questionDto.IsActive = question.IsActive;
-                questionDto.Content = question.Content;
-                questionDto.Image = question.Image;
-                questionDto.QuestionID = question.QuestionID;
-                questionDto.CreatedBy = question.CreatedBy;
-                questionDto.CreatedDate = question.CreatedDate;
-                questionDto.ModifiedBy = question.ModifiedBy;
-                questionDto.ModifiedDate = question.ModifiedDate;
-                questionDto.CategoryID = question.CategoryID;
-                questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == question.CategoryID).Name;
-                questionDto.ExamPaperQuestionID = item.ExamPaperQuesionID;
+                QuestionDto.IsActive = question.IsActive;
+                QuestionDto.Content = question.Content;
+                QuestionDto.Image = question.Image;
+                QuestionDto.QuestionID = question.QuestionID;
+                QuestionDto.CreatedBy = question.CreatedBy;
+                QuestionDto.CreatedDate = question.CreatedDate;
+                QuestionDto.ModifiedBy = question.ModifiedBy;
+                QuestionDto.ModifiedDate = question.ModifiedDate;
+                QuestionDto.CategoryID = question.CategoryID;
+                QuestionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == question.CategoryID).Name;
+                QuestionDto.ExamPaperQuestionID = item.ExamPaperQuesionID;
                 if (question.Level == 1)
                 {
-                    questionDto.LevelName = "Easy";
+                    QuestionDto.LevelName = "Easy";
                 }
                 else if (question.Level == 2)
                 {
-                    questionDto.LevelName = "Normal";
+                    QuestionDto.LevelName = "Normal";
                 }
                 else
                 {
-                    questionDto.LevelName = "Hard";
+                    QuestionDto.LevelName = "Hard";
                 }
-                questionsDto.Add(questionDto);
+                questionsDto.Add(QuestionDto);
             }
             return questionsDto;
         }
@@ -224,30 +305,30 @@ namespace TestingSystem.Data.Repositories
                 }
                 if (i == 0)
                 {
-                    var questionDto = new QuestionDto();
-                    questionDto.IsActive = item.IsActive;
-                    questionDto.Content = item.Content;
-                    questionDto.Image = item.Image;
-                    questionDto.CreatedBy = item.CreatedBy;
-                    questionDto.CreatedDate = item.CreatedDate;
-                    questionDto.ModifiedBy = item.ModifiedBy;
-                    questionDto.ModifiedDate = item.ModifiedDate;
-                    questionDto.CategoryID = item.CategoryID;
-                    questionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == item.CategoryID).Name;
-                    questionDto.QuestionID = item.QuestionID;
+                    var QuestionDto = new QuestionDto();
+                    QuestionDto.IsActive = item.IsActive;
+                    QuestionDto.Content = item.Content;
+                    QuestionDto.Image = item.Image;
+                    QuestionDto.CreatedBy = item.CreatedBy;
+                    QuestionDto.CreatedDate = item.CreatedDate;
+                    QuestionDto.ModifiedBy = item.ModifiedBy;
+                    QuestionDto.ModifiedDate = item.ModifiedDate;
+                    QuestionDto.CategoryID = item.CategoryID;
+                    QuestionDto.CategoryName = DbContext.QuestionCategories.SingleOrDefault(q => q.CategoryID == item.CategoryID).Name;
+                    QuestionDto.QuestionID = item.QuestionID;
                     if (item.Level == 1)
                     {
-                        questionDto.LevelName = "Easy";
+                        QuestionDto.LevelName = "Easy";
                     }
                     else if (item.Level == 2)
                     {
-                        questionDto.LevelName = "Normal";
+                        QuestionDto.LevelName = "Normal";
                     }
                     else
                     {
-                        questionDto.LevelName = "Hard";
+                        QuestionDto.LevelName = "Hard";
                     }
-                    questionsDto.Add(questionDto);
+                    questionsDto.Add(QuestionDto);
                 }
             }
             return questionsDto;
@@ -263,7 +344,7 @@ namespace TestingSystem.Data.Repositories
             }
             else
             {
-                List<QuestionDto> questionDtos = new List<QuestionDto>();
+                List<QuestionDto> QuestionDtos = new List<QuestionDto>();
                 int length = tempQuestionDtos.Count();
                 List<int> indexs = new List<int>();
                 for (int i = 0; i < number; i++)
@@ -276,26 +357,53 @@ namespace TestingSystem.Data.Repositories
                     }
                     while (indexs.Contains(index));
                     indexs.Add(index);
-                    questionDtos.Add(tempQuestionDtos[index]);
+                    QuestionDtos.Add(tempQuestionDtos[index]);
                 }
-                return questionDtos;
+                return QuestionDtos;
             }
 
         }
         public IEnumerable<Answer> GetAnswersByQuestionId(int? id)
         {
-            var listAnswer = DbContext.Answers.Where(x => x.QuestionID == id);
-            return listAnswer.ToList();
+            try
+            {
+                var listAnswer = DbContext.Answers.Where(x => x.QuestionID == id);
+                return listAnswer.ToList();
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return null;//
+            }
+
         }
 
         public IEnumerable<Question> GetAllQuestions()
         {
-            return DbContext.Questions.ToList();
+            try
+            {
+                return DbContext.Questions.ToList();
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                throw;
+            }
+
         }
 
         public IEnumerable<Answer> GetAllAnswers()
         {
-            return DbContext.Answers.ToList();
+            try
+            {
+                return DbContext.Answers.ToList();
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                throw;
+            }
+
         }
 
         public IEnumerable<Level> GetAlLevels()
@@ -309,26 +417,35 @@ namespace TestingSystem.Data.Repositories
 
         public string GetNameLevelByQuestionID(int id)
         {
-            var name = DbContext.Questions.Find(id);
-            if (name.Level == 1)
+            try
             {
-                return "Easy";
+                var name = DbContext.Questions.Find(id);
+                if (name.Level == 1)
+                {
+                    return "Easy";
+                }
+                if (name.Level == 2)
+                {
+                    return "Normal";
+                }
+                if (name.Level == 3)
+                {
+                    return "Hard";
+                }
+                else
+                {
+                    return "None";
+                }
             }
-            if (name.Level == 2)
+            catch (Exception e)
             {
-                return "Normal";
-            }
-            if (name.Level == 3)
-            {
-                return "Hard";
-            }
-            else
-            {
+                log.Debug(e.Message);
                 return "None";
             }
+
         }
 
-        public QuestionDto GetQuestionInQuestionDTO(int? id, QuestionFilterModel searchModel)
+        public QuestionDto GetQuestionInQuestionDto(int? id, QuestionFilterModel searchModel)
         {
             var question = GetAllQuestionDtos(searchModel).SingleOrDefault(x => x.QuestionID == id);
             return question;
@@ -336,15 +453,24 @@ namespace TestingSystem.Data.Repositories
 
         public bool CheckQuestionInExamPaperQuesion(int id)
         {
-            var question = DbContext.ExamPaperQuesions.SingleOrDefault(x => x.QuestionID == id);
-            if (question == null)
+            try
             {
-                return false;//Not Exist
+                var question = DbContext.ExamPaperQuesions.SingleOrDefault(x => x.QuestionID == id);
+                if (question == null)
+                {
+                    return false;//Not Exist
+                }
+                else
+                {
+                    return true;// Exist
+                }
             }
-            else
+            catch (Exception e)
             {
-                return true;// Exist
+                log.Debug(e.Message);
+                return true;
             }
+
         }
     }
 }

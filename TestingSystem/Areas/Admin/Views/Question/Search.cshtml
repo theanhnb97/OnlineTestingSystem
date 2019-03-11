@@ -1,5 +1,4 @@
-﻿
-@using TestingSystem.DataTranferObject.Question
+﻿@using TestingSystem.DataTranferObject.Question
 @using TestingSystem.Models
 @model IEnumerable<TestingSystem.DataTranferObject.Question.QuestionDto>
 @{
@@ -18,7 +17,7 @@
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-        <li class="active"> Question</li>
+        <li class="active"><a href="">Question</a> </li>
     </ol>
 </section>
 <!-- Main content -->
@@ -46,6 +45,9 @@
                             <a href="@Url.Action("Create","Question")">
                                 <div class="btn btn-success">Create</div>
                             </a>
+                            <a href="@Url.Action("QuestionExcelAnswer","Question")">
+                                <div class="btn btn-success"><span class="glyphicon glyphicon-open"></span>Import Question</div>
+                            </a>
                         </div>
                     </div>
                 }
@@ -71,19 +73,25 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="">Create By</label>
-                                            <input type="text" class="form-control" id="CreatedByFilter" name="CreatedBy">
+                                            <input type="text" class="form-control" id="CreatedByFilter" name="CreatedBy" style="width: 249px;">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
-                                            <label for="">Created Date</label>
-                                            <input type="date" class="form-control" id="CreatedDateFilter" name="CreatedDate">
+                                            <label for="">From Date</label>
+                                            <input type="date" class="form-control" id="FromDate" name="FromDate" style="width: 162px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="">To Date</label>
+                                            <input type="date" class="form-control" id="ToDate" name="ToDate" style="width: 162px;">
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="">Category</label>
-                                            <select class="form-control" id="CategoryIDFilter" name="CategoryID">
+                                            <select class="form-control" id="CategoryIDFilter" name="CategoryID" style="width: 160px;">
                                                 <option value="" selected disabled hidden>--Choice one--</option>
                                                 @if (listCategories != null)
                                                 {
@@ -98,7 +106,7 @@
                                     <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="">Level</label>
-                                            <select class="form-control" id="LevelFilter" name="Level">
+                                            <select class="form-control" id="LevelFilter" name="Level" style="width: 160px;">
                                                 <option value="" selected disabled hidden>--Choice one--</option>
                                                 @if (listLevels != null)
                                                 {
@@ -110,7 +118,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-1">
                                         <input type="submit" style="margin-top: 24px;" id="btnFilter" value="Filter" class="btn btn-warning" />
                                     </div>
                                 </div>

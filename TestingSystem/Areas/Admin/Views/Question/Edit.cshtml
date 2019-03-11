@@ -6,13 +6,15 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
     var listAnswerByQuestionID = ViewBag.Answer;
     int j = 0;
+    int count = 0;
 }
 <style>
     .card {
         padding-left: 50px;
         padding-right: 50px;
     }
-    #IsActive{
+
+    #IsActive {
         margin-left: 6px;
     }
 </style>
@@ -66,7 +68,7 @@
                                 }
                                 if (Model.Level != item.LevelStep)
                                 {
-                                    <option selected value="@Model.Level">
+                                    <option value="@Model.Level">
                                         @item.Name
                                     </option>
                                 }
@@ -103,7 +105,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                        @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <div class="checkbox">
                             @Html.EditorFor(model => model.IsActive)
@@ -113,7 +115,7 @@
                 </div>
             </div>
             <p></p>
-           
+
             <div class="form-group" style="padding-bottom: 25px;">
                 <table id="dataTable" class="table table-bordered" cellpadding="0" cellspacing="0" style="margin-left:44px ">
                     <tr>
@@ -124,12 +126,12 @@
                     </tr>
                     @foreach (Answer item in ViewBag.Answer)
                     {
-                        //count++;
+                        count++;
                         <tr style="border:1px solid black">
                             <td style="text-align: center"><b>Answer</b></td>
-                            <td>             
+                            <td>
                                 <input type="hidden" id="AnswerID" name="AnswerID" value="@item.AnswerID">
-                                <input type="text" name="AnswerContent" value="@item.AnswerContent" onchange="myFunction(this)" class="form-control chkWebSite myin">
+                                <input type="text" name="AnswerContent" id="AnswerContent" value="@item.AnswerContent" onchange="myFunction(this)" class="form-control chkWebSite myin">
                                 <span class="check-input" style="color:red;display:none">Please input Content Question!</span>
 
                             </td>
@@ -139,11 +141,14 @@
                             <td>
                                 @if (j > 0)
                                 {
-                                    <a href="#" class="remove">Remove</a>                                }
+                                    <a href="#" class="remove">Remove</a>
+
+                                }
                             </td>
                         </tr>
                         j++;
                     }
+                    @count;
                 </table>
                 <div style="margin-left: 178px">
                     <input type="submit" value="Update" class="btn btn-primary" />
@@ -166,12 +171,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="Name">Category Name</label>
-                    <input type="text" name="Name" class="form-control" id="cateName" />
+                    <input type="text" name="Name" class="form-control" id="cateName" onchange="CategoryCheckCreate()" />
+                    <span id="checkExist"></span>
                 </div>
-                <div class="form-group">
-                    <label for="Description">Is Active</label>
-                    <input type="checkbox" name="IsActive" value="true" />
-                </div>
+                @*<div class="form-group">
+                        <label for="Description">Is Active</label>
+                        <input type="checkbox" name="IsActive" value="true" />
+                    </div>*@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="AddCate">Add</button>
@@ -321,8 +327,19 @@
 @* change content answer => change value iscorrect tag *@
 <script>
     function myFunction(val) {
+
         document.getElementById("IsCorrect").value = val.value;
     }
+    @*$(document).ready(function () {
+        for (int i = 0; i <= @count;i++)
+        {
+            var idContent = "AnswerContent+" + i;
+            var idIsCorrect = "IsCorrect+" + i;
+            $('#' + idContent).change(function(this) {
+                $('#' + idIsCorrect).value = this.value;
+            });
+        }
+    });*@
 </script>
 <script>
     function Validate() {
@@ -341,6 +358,27 @@
             }
         }
         return valid;
+    }
+</script>
+<script>
+    function CategoryCheckCreate() {
+        $("#checkExist").html("Checking...");
+        $.post("@Url.Action("_CheckCategoryNameAvailableCreate", "Question")",
+            {
+                userdata: $("#cateName").val()
+            },
+            function (data) {
+                if (data == 0) {
+                    $("#checkExist").html('<font color="Green">Available !. you can take it.</font>');
+                    $("#cateName").css("border-color", "Green");
+                    $("#AddCate").css("display", "inline-block");
+                }
+                else {
+                    $("#checkExist").html('<font color="Red">Group Name Exists!</font>');
+                    $("#cateName").css("border-color", "Red");
+                    $("#AddCate").css("display", "none");
+                }
+            });
     }
 </script>
 

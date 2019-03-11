@@ -68,7 +68,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             ViewData["Level"] = listLevels;
 
             var listQuestionDtos = questionService.GetAllQuestionDtos(searchModel);
-            return View(listQuestionDtos);
+            ViewBag.listQuestionDtos = listQuestionDtos;
+            return View();
         }
         //[ActionName("GetQuestions")]
         //public ActionResult GetQuestions(QuestionFilterModel searchModel)
@@ -85,7 +86,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
             var listQuestionDtos = questionService.SearchByContent(keySearch, searchModel);
             return View(listQuestionDtos);
-        }     
+        }
         public ActionResult Detail(int? id, QuestionFilterModel searchModel)
         {
             if (id == null)
@@ -259,6 +260,8 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             }
 
             questionService.UpdateQuestion(question);
+            //
+            answerService.DelteAnswerbyQuestionID(question.QuestionID);
 
             foreach (var item in listAnswer)
             {
@@ -270,7 +273,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                 else
                 {
 
-                    answerService.UpdateAnswer(item);
+                    answerService.AddAnswer(item);
                 }
             }
 

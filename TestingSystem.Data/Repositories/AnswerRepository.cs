@@ -10,6 +10,8 @@ namespace TestingSystem.Data.Repositories
         List<Answer> GetAnswersByQuestionID(int? id);
         bool UpdateAnswer(Answer answer);
         int AddAnswer(Answer answer);
+        int DeleteAnswer(int id);
+        int DelteAnswerbyQuestionID(int id);
     }
 
     public class AnswerRepository : RepositoryBase<Answer>, IAnswerRepository
@@ -26,6 +28,34 @@ namespace TestingSystem.Data.Repositories
                 this.DbContext.SaveChanges();
                 return 1;
             }
+        }
+        public int DeleteAnswer(int id)
+        {
+            var answer = DbContext.Answers.Find(id);
+            if (answer != null)
+            {
+                this.DbContext.Answers.Remove(answer);
+                return DbContext.SaveChanges();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int DelteAnswerbyQuestionID(int id)
+        {
+            var listAnswer = DbContext.Answers.Where(x => x.QuestionID == id);
+            if (listAnswer != null)
+            {
+                foreach (var item in listAnswer)
+                {
+                    DbContext.Answers.Remove(item);
+                }
+                return DbContext.SaveChanges();
+            }
+            else
+                return 0;
         }
 
         public List<Answer> GetAnswersByQuestionID(int? id)
