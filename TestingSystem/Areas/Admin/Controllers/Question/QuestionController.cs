@@ -10,6 +10,7 @@ using System.Linq;
 using System;
 using TestingSystem.BaseController;
 using Excel = Microsoft.Office.Interop.Excel;
+using OfficeOpenXml;
 
 namespace TestingSystem.Areas.Admin.Controllers.Question
 {
@@ -129,7 +130,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
                     }
                     if (i > 0)
                     {
-                        Success = "Delete exam paper successfully!";
+                        Success = "Delete question successfully!";
                         return RedirectToAction("Index", "Question");
                     }
                 }
@@ -297,87 +298,194 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
             return Json(new { data = questions }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult QuestionExcelAnswer()
+        public void QuestionTemplateFile()
+        {
+            ExcelPackage pck = new ExcelPackage();
+            ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Question");
+
+            ws.Cells["A1"].Style.Font.Bold = true;
+            ws.Cells["A1"].Value = "Question Infomation";
+            ws.Cells["D1"].Style.Font.Bold = true;
+            ws.Cells["D1"].Value = "Answer Infomation";
+            ws.Cells["A3"].Style.Font.Bold = true;
+            ws.Cells["A3"].Value = "Question Content";
+            ws.Cells["B3"].Style.Font.Bold = true;
+            ws.Cells["B3"].Value = "Level";
+            ws.Cells["C3"].Style.Font.Bold = true;
+            ws.Cells["C3"].Value = "Category";
+            ws.Cells["D3"].Style.Font.Bold = true;
+            ws.Cells["D3"].Value = "Answer1";
+            ws.Cells["E3"].Style.Font.Bold = true;
+            ws.Cells["E3"].Value = "IsCorrect Answer1";
+            ws.Cells["F3"].Style.Font.Bold = true;
+            ws.Cells["F3"].Value = "Answer2";
+            ws.Cells["G3"].Style.Font.Bold = true;
+            ws.Cells["G3"].Value = "IsCorrect Answer2";
+            ws.Cells["H3"].Style.Font.Bold = true;
+            ws.Cells["H3"].Value = "Answer3";
+            ws.Cells["I3"].Style.Font.Bold = true;
+            ws.Cells["I3"].Value = "IsCorrect Answer3";
+            ws.Cells["J3"].Style.Font.Bold = true;
+            ws.Cells["J3"].Value = "Answer4";
+            ws.Cells["K3"].Style.Font.Bold = true;
+            ws.Cells["K3"].Value = "IsCorrect Answer4";
+            ws.Cells["L3"].Style.Font.Bold = true;
+            ws.Cells["L3"].Value = "Answer5";
+            ws.Cells["M3"].Style.Font.Bold = true;
+            ws.Cells["M3"].Value = "IsCorrect Answer5";
+
+            ws.Cells["A4"].Value = "Which of the following is not true about the MAX and MIN functions?";
+            var level = ws.DataValidations.AddListValidation("B4");
+            level.Formula.Values.Add("Easy");
+            level.Formula.Values.Add("Normal");
+            level.Formula.Values.Add("Hard");
+
+            var category = ws.DataValidations.AddListValidation("C4");
+
+            ws.Cells["D4"].Value = "Both can be used for any data type";
+            ws.Cells["E4"].Value = "FALSE";
+            ws.Cells["F4"].Value = "MAX return maximun value";
+            ws.Cells["G4"].Value = "FALSE";
+            ws.Cells["H4"].Value = "MIN return minium value";
+            ws.Cells["I4"].Value = "FALSE";
+            ws.Cells["J4"].Value = "All are true";
+            ws.Cells["K4"].Value = "TRUE";
+
+            ExcelWorksheet noteSheet = pck.Workbook.Worksheets.Add("Note");
+
+            noteSheet.Cells["A1"].Style.Font.Bold = true;
+            noteSheet.Cells["A1"].Value = "(*) Note";
+            noteSheet.Cells["A2"].Value = @"To import question correctly, ""Category"" must select from dropdown list";
+            noteSheet.Cells["A3"].Value = @"For each question have maximum 5 answer, if there is no content leave It blank";
+            noteSheet.Cells["A:AZ"].AutoFitColumns();
+
+
+
+            var listQuestionCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
+            foreach (var item in listQuestionCategory)
+            {
+                category.Formula.Values.Add(item.Name);
+            }
+
+            ws.Cells["A:AZ"].AutoFitColumns();
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment: filename=" + "QuestionTemplate.xlsx");
+            Response.BinaryWrite(pck.GetAsByteArray());
+            Response.End();
+        }
+
+        public ActionResult ImportQuestion()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult QuestionExcelAnswer(HttpPostedFileBase excelfile)
+        public ActionResult ImportQuestion(HttpPostedFileBase excelfile)
         {
             if (excelfile == null)
             {
-                ViewBag.ThongBao = "Please choose excel file to import exam paper!";
-                return View();
+                Failure = "Please choose excel file to import exam paper";
+                return RedirectToAction("ImportExamPaper");
+
             }
             else
             {
                 if (excelfile.FileName.EndsWith("xls") || excelfile.FileName.EndsWith("xlsx"))
                 {
-                    string path = Path.Combine(Server.MapPath("~/FileExcel/"),
-                        Guid.NewGuid().ToString() + Path.GetExtension(excelfile.FileName));
-                    excelfile.SaveAs(path);
-                    Excel.Application application = new Excel.Application
+                    try
                     {
-                        Visible = true
-                    };
-                    Excel.Workbook workbook = application.Workbooks.Open(path);
-                    Excel.Worksheet worksheet = workbook.Sheets[@"ExamPaper"];
-                    Excel.Range range = worksheet.UsedRange;
-
-
-                    Models.ExamPaper examPaper = new Models.ExamPaper();
-                    examPaper.Title = ((Excel.Range)range.Cells[3, 1]).Text;
-                    examPaper.Time = int.Parse(((Excel.Range)range.Cells[4, 1]).Text);
-                    examPaper.Status = Boolean.Parse(((Excel.Range)range.Cells[6, 1]).Text);
-                    examPaper.IsActive = Boolean.Parse(((Excel.Range)range.Cells[5, 1]).Text);
-                    examPaper.CreatedBy = 1;
-                    examPaper.CreatedDate = DateTime.Now;
-                    examPaper.ModifiedBy = 1;
-                    examPaper.ModifiedDate = DateTime.Now;
-                    int result = examPaperService.Create(examPaper);
-
-                    for (int row = 11; row <= range.Rows.Count; row++)
-                    {
-                        Models.Question question = new Models.Question
+                        string path = Path.Combine(Server.MapPath("~/FileExcel/"), Guid.NewGuid().ToString() + Path.GetExtension(excelfile.FileName));
+                        excelfile.SaveAs(path);
+                        Excel.Application application = new Excel.Application
                         {
-                            Content = ((Excel.Range)range.Cells[row, 1]).Text,
-                            Level = int.Parse(((Excel.Range)range.Cells[row, 2]).Text),
-                            CategoryID = int.Parse(((Excel.Range)range.Cells[row, 3]).Text),
-                            IsActive = true,
-                            CreatedBy = 1,
-                            CreatedDate = DateTime.Now,
-                            ModifiedBy = 1,
-                            ModifiedDate = DateTime.Now
+                            Visible = true
                         };
-                        int questionId = questionService.AddQuestion(question);
+                        Excel.Workbook workbook = application.Workbooks.Open(path);
+                        Excel.Worksheet worksheet = workbook.Sheets[@"Question"];
+                        Excel.Range range = worksheet.UsedRange;
 
-                        Answer answer = new Answer();
-                        int j = 5;
-                        for (int i = 4; i <= 13; i += 2)
+                        var listQuestionCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
+                        for (int row = 4; row <= range.Rows.Count; row++)
                         {
-                            string content = ((Excel.Range)range.Cells[row, i]).Text;
-                            if (content != "")
+                            int level = 0;
+                            if (((Excel.Range)range.Cells[row, 2]).Text == "Hard")
                             {
-                                answer.AnswerContent = content;
-                                answer.IsCorrect = Boolean.Parse(((Excel.Range)range.Cells[row, j]).Text);
-                                answer.QuestionID = questionId;
-                                answerService.AddAnswer(answer);
+                                level = 3;
+                            }
+                            else if (((Excel.Range)range.Cells[row, 2]).Text == "Normal")
+                            {
+                                level = 2;
+                            }
+                            else if (((Excel.Range)range.Cells[row, 2]).Text == "Easy")
+                            {
+                                level = 1;
                             }
                             else
                             {
-                                continue;
+                                Failure = "Question level must be select from dropdown list";
+                                return RedirectToAction("ImportQuestion");
                             }
-                            j += 2;
-                        }
+                            int categoryId = 0;
+                            int k = 0;
+                            foreach (var item in listQuestionCategory)
+                            {
+                                if (((Excel.Range)range.Cells[row, 3]).Text == item.Name)
+                                {
+                                    categoryId = item.CategoryID;
+                                    k++;
+                                }
+                            }
+                            if (k == 0)
+                            {
+                                Failure = "Question category must be select from dropdown list";
+                                return RedirectToAction("ImportQuestion");
+                            }
+                            Models.Question question = new Models.Question
+                            {
+                                Content = ((Excel.Range)range.Cells[row, 1]).Text,
+                                CategoryID = categoryId,
+                                Level = level,
+                                IsActive = true,
+                                CreatedBy = 1,
+                                CreatedDate = DateTime.Now,
+                                ModifiedBy = 1,
+                                ModifiedDate = DateTime.Now
+                            };
+                            int questionId = questionService.AddQuestion(question);
 
+                            Answer answer = new Answer();
+                            int j = 5;
+                            for (int i = 4; i <= 13; i += 2)
+                            {
+                                string content = ((Excel.Range)range.Cells[row, i]).Text;
+                                if (content != "")
+                                {
+                                    answer.AnswerContent = content;
+                                    answer.IsCorrect = Boolean.Parse(((Excel.Range)range.Cells[row, j]).Text);
+                                    answer.QuestionID = questionId;
+                                    answerService.AddAnswer(answer);
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                                j += 2;
+                            }
+                        }
                     }
-                    return RedirectToAction("Questions");
+                    catch (Exception ex)
+                    {
+                        Failure = ex.Message;
+                        return RedirectToAction("ImportQuestion");
+                    }
+                    Success = "Import question list successfully!";
+                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    ViewBag.ThongBao = "Please choose excel file to import exam paper!";
-                    return View();
+                    Failure = "Please choose excel file to import question";
+                    return RedirectToAction("ImportQuestion");
                 }
             }
         }

@@ -23,6 +23,8 @@ namespace TestingSystem.Data.Repositories
     }
     public class ExamPaperQuestionRepository : RepositoryBase<ExamPaperQuesion>, IExamPaperQuestionRepository
     {
+
+
         public ExamPaperQuestionRepository(IDbFactory dbFactory) : base(dbFactory)
         {
 
@@ -37,7 +39,8 @@ namespace TestingSystem.Data.Repositories
             }
             catch (Exception e )
             {
-                Console.Write(e.Message);
+                //log.Debug(e.Message);
+                return null;
                 throw;
             }
             

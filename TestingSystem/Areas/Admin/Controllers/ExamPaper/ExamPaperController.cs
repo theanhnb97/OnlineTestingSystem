@@ -167,8 +167,8 @@
                     {
                         examPaper.NumberOfQuestion = 0;
                         examPaper.CreatedDate = DateTime.Now;
-                        examPaper.CreatedBy = 1;
-                        examPaper.ModifiedBy = 1;
+                        examPaper.CreatedBy = int.Parse(Session["Name"].ToString());
+                        examPaper.ModifiedBy = int.Parse(Session["Name"].ToString());
                         if (examPaperService.Create(examPaper) > 0)
                         {
                             Success = "Insert exam paper successfully!";
@@ -178,7 +178,7 @@
                     else
                     {
                         examPaper.ModifiedDate = DateTime.Now;
-                        examPaper.ModifiedBy = 1;
+                        examPaper.ModifiedBy = int.Parse(Session["Name"].ToString());
                         if (examPaperService.Edit(examPaper) > 0)
                         {
                             Success = "Update exam paper successfully!";
@@ -294,9 +294,9 @@
                             return RedirectToAction("ImportExamPaper");
                         }
                         examPaper.IsActive = Boolean.Parse(((Excel.Range)range.Cells[6, 2]).Text);
-                        examPaper.CreatedBy = 1;
+                        examPaper.CreatedBy = int.Parse(Session["Name"].ToString());
                         examPaper.CreatedDate = DateTime.Now;
-                        examPaper.ModifiedBy = 1;
+                        examPaper.ModifiedBy = int.Parse(Session["Name"].ToString());
                         examPaper.ModifiedDate = DateTime.Now;
                         int examPaperId = examPaperService.Create(examPaper);
                         var listQuestionCategory = questionCategorySevice.GetAll();
@@ -341,9 +341,9 @@
                                 CategoryID = categoryId,
                                 Level = level,
                                 IsActive = true,
-                                CreatedBy = 1,
+                                CreatedBy = int.Parse(Session["Name"].ToString()),
                                 CreatedDate = DateTime.Now,
-                                ModifiedBy = 1,
+                                ModifiedBy = int.Parse(Session["Name"].ToString()),
                                 ModifiedDate = DateTime.Now
                             };
                             int questionId = questionService.AddQuestion(question);
@@ -494,7 +494,7 @@
             ws.Cells["M10"].Style.Font.Bold = true;
             ws.Cells["M10"].Value = "IsCorrect Answer5";
 
-            ws.Cells["A11"].Value = "Question Content";
+            ws.Cells["A11"].Value = "Which of the following is not true about the MAX and MIN functions?";
             var level = ws.DataValidations.AddListValidation("B11");
             level.Formula.Values.Add("Easy");
             level.Formula.Values.Add("Normal");
@@ -502,12 +502,14 @@
 
             var category = ws.DataValidations.AddListValidation("C11");
 
-            ws.Cells["D11"].Value = "answer1";
-            ws.Cells["E11"].Value = "TRUE";
-            ws.Cells["F11"].Value = "answer2";
+            ws.Cells["D11"].Value = "Both can be used for any data type";
+            ws.Cells["E11"].Value = "FALSE";
+            ws.Cells["F11"].Value = "MAX return maximun value";
             ws.Cells["G11"].Value = "FALSE";
-            ws.Cells["H11"].Value = "answer3";
+            ws.Cells["H11"].Value = "MIN return minium value";
             ws.Cells["I11"].Value = "FALSE";
+            ws.Cells["J11"].Value = "All are true";
+            ws.Cells["K11"].Value = "TRUE";
 
             ExcelWorksheet noteSheet = pck.Workbook.Worksheets.Add("Note");
 
@@ -519,7 +521,7 @@
 
 
 
-            var listQuestionCategory = questionCategorySevice.GetAll();
+            var listQuestionCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
             foreach (var item in listQuestionCategory)
             {
                 category.Formula.Values.Add(item.Name);

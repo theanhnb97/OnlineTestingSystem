@@ -7294,7 +7294,7 @@
     <Content Include="Areas\Admin\Views\Question\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Question\QuestionExcelAnswer.cshtml" />
+    <Content Include="Areas\Admin\Views\Question\ImportQuestion.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Questions.cshtml" />
     <Content Include="Areas\Admin\Views\Question\Search.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessageBoxDelete.cshtml" />
@@ -7341,6 +7341,7 @@
     <Folder Include="Areas\Admin\Models\Account\" />
     <Folder Include="Areas\Admin\Models\Exam-Question\" />
     <Folder Include="Areas\Admin\Models\Exam\" />
+    <Folder Include="FileExcel\" />
     <Folder Include="Models\" />
     <Folder Include="Scripts\Question\ckeditor\adapters\" />
     <Folder Include="Scripts\Question\ckeditor\lang\" />
