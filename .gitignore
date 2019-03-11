@@ -1,4 +1,6 @@
 
+*.cache
+
 /.vs
 /TestingSystem.Sevice/obj
 /TestingSystem.Sevice/bin
@@ -12,3 +14,4 @@
 /TestingSystem/bin
 /TestingSystem.Common/obj
 /TestingSystem.Common/bin
+/.vs/TestingSystem/v15/*.suo

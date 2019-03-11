@@ -11,6 +11,19 @@
     public class _RegisterController : Controller
     {
         /// <summary>
+        /// Sets the success.
+        /// </summary>
+        /// <value>The success.</value>
+        public string Success { set { TempData["Success"] = ViewData["Success"] = value; } }
+        /// <summary>
+        /// Sets the failure.
+        /// </summary>
+        /// <value>The failure.</value>
+        public string Failure { set { TempData["Failure"] = ViewData["Failure"] = value; } }
+
+
+
+        /// <summary>
         /// Defines the userService
         /// </summary>
         protected IUserService userService;
@@ -48,11 +61,22 @@
         public ActionResult Index(UserRegister user)
         {
             if (user.password != user.comfirmPassword)
+            {
+                Failure = "Your comfirm password not same password";
                 return View();
+            }
             user.password = Encryptor.MD5Hash(user.password);
             if (userService.Register(user))
+            {
+                Success = "Register success, sign in";
                 return RedirectToAction("Login", "Login");
-            return View();
+            }
+            else
+            {
+                Failure = "Register fail, please try again.";
+                return View();
+            }
+            
         }
     }
 }

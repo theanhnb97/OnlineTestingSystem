@@ -14,6 +14,22 @@ namespace TestingSystem.Controllers
     public class _AccountController : Controller
     {
         /// <summary>
+        /// Sets the success.
+        /// </summary>
+        /// <value>The success.</value>
+        public string Success { set { TempData["Success"] = ViewData["Success"] = value; } }
+        /// <summary>
+        /// Sets the failure.
+        /// </summary>
+        /// <value>The failure.</value>
+        public string Failure { set { TempData["Failure"] = ViewData["Failure"] = value; } }
+
+
+       
+
+
+
+        /// <summary>
         /// Defines the userService
         /// </summary>
         private IUserService userService;
@@ -73,6 +89,7 @@ namespace TestingSystem.Controllers
         {
             if (pass != comfirmpass)
             {
+                Failure = "Password does not same";
                 ViewBag.email = email;
                 return View();
             }
@@ -91,6 +108,7 @@ namespace TestingSystem.Controllers
             }
             email = email.Split('_')[0];
             userService.Reset(email, Encryptor.MD5Hash(comfirmpass));
+            Success = "Reset your password success!";
             return RedirectToAction("Login", "Login");
         }
 
@@ -105,7 +123,10 @@ namespace TestingSystem.Controllers
         {
             key = Base64.Decode(key);
             if (userService.Active(key) == 1)
+            {
+                Success = "Active your account success!";
                 return RedirectToAction("Login", "Login");
+            }
             else
             {
                 Response.StatusCode = 404;

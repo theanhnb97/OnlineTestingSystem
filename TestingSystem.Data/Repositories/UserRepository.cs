@@ -168,7 +168,6 @@ namespace TestingSystem.Data.Repositories
                 if (myUser.Status == 0) return 0;
                 return myUser.UserId;
             }
-
             return -1;
         }
 

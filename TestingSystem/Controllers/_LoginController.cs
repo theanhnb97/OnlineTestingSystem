@@ -12,6 +12,18 @@
     /// </summary>
     public class _LoginController : Controller
     {
+
+        /// <summary>
+        /// Sets the success.
+        /// </summary>
+        /// <value>The success.</value>
+        public string Success { set { TempData["Success"] = ViewData["Success"] = value; } }
+        /// <summary>
+        /// Sets the failure.
+        /// </summary>
+        /// <value>The failure.</value>
+        public string Failure { set { TempData["Failure"] = ViewData["Failure"] = value; } }
+
         /// <summary>
         /// Defines the userService
         /// </summary>
@@ -63,6 +75,7 @@
             int id = userService.Login(user);
             if (id > 0)
             {
+                //Success = "Sign in success";
                 bool AdminPage = false;
                 Session.Add("Name", id);
                 List<RoleAction> myRoleActions = GetAction();
@@ -78,7 +91,16 @@
             }
             else
             {
-                return View();
+                if (id == 0)
+                {
+                    Failure = "Your account need comfirm email to Sign in";
+                    return View();
+                }
+                else
+                {
+                    Failure = "Your user name or password is not correct!";
+                    return View();
+                }
             }
         }
 

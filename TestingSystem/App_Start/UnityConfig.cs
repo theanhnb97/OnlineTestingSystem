@@ -46,8 +46,8 @@ namespace TestingSystem
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
-             container.RegisterType<IUnitOfWork, UnitOfWork>();
-             container.RegisterType<IDbFactory, DbFactory>();
+            container.RegisterType<IUnitOfWork, UnitOfWork>();
+            container.RegisterType<IDbFactory, DbFactory>();
 
 
 

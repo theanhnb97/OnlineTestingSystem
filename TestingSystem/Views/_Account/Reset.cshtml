@@ -23,32 +23,34 @@
 <body class="hold-transition register-page">
     <div class="register-box">
         <div class="register-logo">
-            <a href="/"><b>Đổi mật khẩu</b></a>
+            <a href="/"><b>Reset password</b></a>
         </div>
         <div class="register-box-body">
-            <p class="login-box-msg">Vui lòng xác nhận mật khẩu mới:</p>
+            <p class="login-box-msg">Reset password:</p>
             @*@using (Html.BeginForm(new {@id="form-login"}))*@
             <form id="form-login" method="post">
                 <input type="hidden" name="email" value="@ViewBag.email"/>
                 <div class="form-group has-feedback">
                     <input type="password" name="pass"
-                           pattern=".{5,16}" required="true" title="Mật khẩu không hợp lệ!"
-                           class="form-control" placeholder="Mật khẩu">
+                           required="Password is a required field"
+                           pattern=".{5,16}" title="Password must have 5-16 characters"
+                           class="form-control" placeholder="New password">
                     <span class="glyphicon fa fa-key form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
                     <input type="password" name="comfirmpass"
-                           pattern=".{5,16}" required="true" title="Mật khẩu không hợp lệ!"
-                           class="form-control" placeholder="Xác nhận mật khẩu">
+                           required="Password is a required field"
+                           pattern=".{5,16}" title="Password must have 5-16 characters"
+                           class="form-control" placeholder="Retype password">
                     <span class="glyphicon fa fa-key form-control-feedback"></span>
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
-                        <a href="/Login" class="text-center">Đăng nhập.</a>
+                        <a href="/Login" class="text-center">Sign in.</a>
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Xác nhận</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Change</button>
                     </div>
                     <!-- /.col -->
                 </div>

@@ -71,7 +71,7 @@
                 ViewBag.ListActions = Action;
 
                 // Get Curent Action-Controller and check Permision for Action
-                string controller_Action =
+                string controller_Action =  
                     filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString() + "" +
                     filterContext.Controller.ControllerContext.RouteData.Values["action"].ToString();
 
