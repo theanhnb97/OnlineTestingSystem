@@ -6726,6 +6726,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\loadding.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\QuestionUpload\Images\250px-Terry_Crews_by_Gage_Skidmore_5.jpg" />
     <Content Include="Content\QuestionUpload\Images\Chelsea_old_logo.png" />
@@ -7283,7 +7284,7 @@
     <Content Include="Areas\Admin\Views\ExamPaper\Details.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ExamPapers.cshtml" />
-    <Content Include="Areas\Admin\Views\ExamPaper\ExportToPdf.cshtml" />
+    <Content Include="Areas\Admin\Views\ExamPaper\_ExportToPdf.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\ImportExamPaper.cshtml" />
     <Content Include="Areas\Admin\Views\ExamPaper\Index.cshtml" />
     <Content Include="Areas\Admin\Views\QuestionCategory\AddCategory.cshtml" />

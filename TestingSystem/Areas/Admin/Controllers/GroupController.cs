@@ -241,7 +241,7 @@
         /// <returns>The <see cref="ActionResult"/></returns>
         public ActionResult Delete(int id)
         {
-            bool checkDel = groupService.DeleteGroup(id);
+            int checkDel = groupService.DeleteGroup(id);
             return RedirectToAction("Index");
         }
 

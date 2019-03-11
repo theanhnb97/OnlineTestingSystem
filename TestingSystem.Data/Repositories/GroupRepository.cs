@@ -23,7 +23,11 @@
         /// The Del
         /// </summary>
         /// <param name="id">The id<see cref="int"/></param>
-        void Del(int id);
+        int DeleteGroup(int id);
+
+        int CreateGroup(Group group);
+
+        int EditGroup(Group group);
 
         /// <summary>
         /// The GetAllGroupByName
@@ -157,7 +161,7 @@
         /// The Add
         /// </summary>
         /// <param name="group">The group<see cref="Group"/></param>
-        public override void Add(Group group)
+        public int CreateGroup(Group group)
         {
             try
             {
@@ -170,11 +174,13 @@
                     Description = group.Description,
                 });
                 DbContext.SaveChanges();
+                return 1;
 
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
+                return 0;
             }
         }
 
@@ -182,7 +188,7 @@
         /// The Update
         /// </summary>
         /// <param name="group">The group<see cref="Group"/></param>
-        public override void Update(Group group)
+        public int EditGroup(Group group)
         {
             try
             {
@@ -199,10 +205,12 @@
                     }
                 }
                 DbContext.SaveChanges();
+                return 1;
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
+                return 0;
             }
         }
 
@@ -210,7 +218,7 @@
         /// The Del
         /// </summary>
         /// <param name="id">The id<see cref="int"/></param>
-        public void Del(int id)
+        public int DeleteGroup(int id)
         {
             try
             {
@@ -224,10 +232,12 @@
                         break;
                     }
                 }
+                return 1;
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
+                return 0;
             }
         }
 
@@ -268,7 +278,7 @@
         {
             try
             {
-                return this.DbContext.Groups.Where(s => s.GroupName.Contains(nameGroup) && s.GroupId != idGroup).ToList();
+                return this.DbContext.Groups.Where(s => s.GroupName == nameGroup && s.GroupId != idGroup).ToList();
             }
             catch (Exception e)
             {

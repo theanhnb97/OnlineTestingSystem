@@ -5,6 +5,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
     int i = 0;
     bool check = false;
+    bool checkUrl = false;
 }
 
 <section class="content-header">
@@ -84,6 +85,7 @@
                     <td>
                         @if (ViewBag.CountListGroup > 0)
                         {
+                            checkUrl = true;
                             foreach (var obj in ViewBag.ListUserGroup)
                             {
                                 if (item.UserId == obj.UserId)
@@ -112,15 +114,19 @@
                         }
                     </td>
                     <td>
-                        @if (check == true)
+                        @if (check == true && ViewBag.CountListGroup > 0)
                         {
                             @Html.ActionLink("Remove", "RemoveAccount", "Group", new { idUser = item.UserId, idGroup = ViewBag.IdGroup }, null)
                             check = false;
                         }
-                        else
+                        else if (check == false && ViewBag.CountListGroup > 0)
                         {
                             @Html.ActionLink("Add", "AddAccount", "Group", new { idUser = item.UserId, idGroup = ViewBag.IdGroup }, null)
                             check = true;
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Add", "AddAccount", "Group", new { idUser = item.UserId, idGroup = ViewBag.IdGroup }, null)
                         }
                     </td>
                 </tr>

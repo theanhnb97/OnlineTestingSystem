@@ -37,51 +37,50 @@
                         <div class="col-md-6">
                             <a href="/Admin/Action/Scan">
                                 <button class="btn btn-success"
-                                onclick="return confirm('Cảnh báo','Bạn có thực sự muốn quét lại chức năng của hệ thống?');"
-                                        >Quét lại</button>
+                                        onclick="Load();"
+                                >Scan</button>
                             </a>
-
                         </div>
                     </div>
                     <form action="@Url.Action("DeleteMutil")" id="form-delete" method="post">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
-                                <tr>
-                                    <td width="5%">
-                                        <input name="all" id="checkall" type="checkbox" onchange="Check(this)" />
-                                    </td>
-                                    <th width="7%">STT</th>
-                                    <th>Tên tác vụ</th>
-                                    <th>Chi tiết</th>
-                                    <th width="12%">Hành động</th>
-                                </tr>
+                            <tr>
+                                <td width="5%">
+                                    <input name="all" id="checkall" type="checkbox" onchange="Check(this)" />
+                                </td>
+                                <th width="7%">STT</th>
+                                <th>Tên tác vụ</th>
+                                <th>Chi tiết</th>
+                                <th width="12%">Hành động</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in listActions)
-                                {
-                                    <tr>
-                                        <td>
-                                            <input type="checkbox" id="checkone" name="list" value="@item.ActionId" onchange="changee();" />
-                                        </td>
-                                        <td>@stt</td>
-                                        <td>
-                                            @item.ActionName
-                                        </td>
-                                        <td>@item.Description</td>
-                                        <td>
-                                            <a href="/Admin/Action/Edit/@item.ActionId">
-                                                <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
-                                            </a>
-                                            <a href="/Admin/Action/Delete/@item.ActionId" onclick="return confirm('Are you sure you want to Delete mutil?');">
-                                                <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
-                                            </a>
-                                            <a href="/Admin/Action/Detail/@item.ActionId">
-                                                <div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    stt++;
-                                }
+                            @foreach (var item in listActions)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="checkone" name="list" value="@item.ActionId" onchange="changee();" />
+                                    </td>
+                                    <td>@stt</td>
+                                    <td>
+                                        @item.ActionName
+                                    </td>
+                                    <td>@item.Description</td>
+                                    <td>
+                                        <a href="/Admin/Action/Edit/@item.ActionId">
+                                            <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
+                                        </a>
+                                        <a href="/Admin/Action/Delete/@item.ActionId" onclick="return confirm('Are you sure you want to Delete mutil?');">
+                                            <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
+                                        </a>
+                                        <a href="/Admin/Action/Detail/@item.ActionId">
+                                            <div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>
+                                        </a>
+                                    </td>
+                                </tr>
+                                stt++;
+                            }
                             </tbody>
                         </table>
                         <button class="btn btn-danger" id="btn-delete" disabled
@@ -99,6 +98,30 @@
     </div>
     <!-- /.row -->
 </section>
+
+<div class="load-wrapp">
+    <div class="load-5">
+        <p>Scaning... Please wait some seconds...</p>
+        <div class="ring-2">
+            <div class="ball-holder">
+                <div class="ball"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/loadding.css" rel="stylesheet" />
+<script>
+    function Load() {
+        var a=confirm('Cảnh báo','Bạn có thực sự muốn quét lại chức năng của hệ thống?');
+        if(a) {
+            $(".load-wrapp").show();
+            return a;
+        }
+    }
+</script>
+
+
+
 @*<script src="~/Scripts/jquery-3.3.1.min.js"></script>*@
 <!-- /.content -->
 <script language='javascript'>

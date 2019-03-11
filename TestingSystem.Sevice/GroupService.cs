@@ -17,14 +17,14 @@
         /// The CreateGroup
         /// </summary>
         /// <param name="group">The group<see cref="Group"/></param>
-        void CreateGroup(Group group);
+        int CreateGroup(Group group);
 
         // function edit information group
         /// <summary>
         /// The EditGroup
         /// </summary>
         /// <param name="group">The group<see cref="Group"/></param>
-        void EditGroup(Group group);
+        int EditGroup(Group group);
 
         // function delete group by id
         /// <summary>
@@ -32,7 +32,7 @@
         /// </summary>
         /// <param name="id">The id<see cref="int"/></param>
         /// <returns>The <see cref="bool"/></returns>
-        bool DeleteGroup(int id);
+        int DeleteGroup(int id);
 
         // function get group by id
         /// <summary>
@@ -112,9 +112,9 @@
         /// The CreateGroup
         /// </summary>
         /// <param name="group">The group<see cref="Group"/></param>
-        public void CreateGroup(Group group)
+        public int CreateGroup(Group group)
         {
-            groupRepository.Add(group);
+            return groupRepository.CreateGroup(group);
         }
 
         /// <summary>
@@ -122,24 +122,24 @@
         /// </summary>
         /// <param name="id">The id<see cref="int"/></param>
         /// <returns>The <see cref="bool"/></returns>
-        public bool DeleteGroup(int id)
+        public int DeleteGroup(int id)
         {
             var listUser = groupRepository.GetAllUserInGroup(id);
             if (listUser.Count() == 0)
             {
-                groupRepository.Del(id);
-                return true;
+                groupRepository.DeleteGroup(id);
+                return 1;
             }
-            return false;
+            return 0;
         }
 
         /// <summary>
         /// The EditGroup
         /// </summary>
         /// <param name="group">The group<see cref="Group"/></param>
-        public void EditGroup(Group group)
+        public int EditGroup(Group group)
         {
-            groupRepository.Update(group);
+            return groupRepository.EditGroup(group);
         }
 
         /// <summary>

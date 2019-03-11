@@ -58,9 +58,14 @@
             List<string> myNewList = GetAll();
             if (actionService.ScanUpdate(myNewList))
             {
+                Success = "Scan success!";
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            else
+            {
+                Failure = "Scan fail";
+                return RedirectToAction("Index");
+            }
         }
 
         //public ActionResult Create()
@@ -137,10 +142,12 @@
                     int i = int.Parse(item);
                     actionService.DeleteAction(i);
                 }
+                Success="Delete success";
             }
-            catch
+            catch(Exception e)
             {
-                
+                log.Debug(e.Message);
+                Failure = "Delete mutil fail...";
             }
             return RedirectToAction("Index");
         }
@@ -179,8 +186,13 @@
         [HttpPost]
         public ActionResult Edit(Action myAction)
         {
-            actionService.EditAction(myAction);
-            return RedirectToAction("Index");
+            if (actionService.EditAction(myAction))
+            {
+                Success = "Update success!";
+                return RedirectToAction("Index");
+            }
+            Failure = "Update fail! please try again!";
+            return RedirectToAction("Edit/"+myAction.ActionId);
         }
 
         /// <summary>

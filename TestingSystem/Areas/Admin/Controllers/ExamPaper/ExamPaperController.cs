@@ -390,7 +390,7 @@
         /// </summary>
         /// <param name="examPaperId">The examPaperId<see cref="int"/></param>
         /// <returns>The <see cref="ActionResult"/></returns>
-        public ActionResult ExportToPdf(int examPaperId)
+        public ActionResult _ExportToPdf(int examPaperId)
         {
             try
             {
@@ -426,7 +426,7 @@
             {
                 Models.ExamPaper examPaper = new Models.ExamPaper();
                 examPaper = examPaperService.GetExamPaperById(examPaperId);
-                return new ActionAsPdf("ExportToPdf", new { examPaperId = examPaperId })
+                return new ActionAsPdf("_ExportToPdf", new { examPaperId = examPaperId })
                 {
                     FileName = examPaper.Title + ".pdf"
                 };
@@ -519,7 +519,7 @@
 
 
 
-            var listQuestionCategory = questionCategorySevice.GetAllQuestionCategoriesActive();
+            var listQuestionCategory = questionCategorySevice.GetAll();
             foreach (var item in listQuestionCategory)
             {
                 category.Formula.Values.Add(item.Name);

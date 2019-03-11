@@ -21,7 +21,7 @@
         /// The EditAction
         /// </summary>
         /// <param name="action">The action<see cref="Action"/></param>
-        void EditAction(Action action);
+        bool EditAction(Action action);
 
         /// <summary>
         /// The GetAllActions
@@ -110,9 +110,9 @@
         /// The EditAction
         /// </summary>
         /// <param name="action">The action<see cref="Action"/></param>
-        public void EditAction(Action action)
+        public bool EditAction(Action action)
         {
-            actionRepository.Update(action);
+            return actionRepository.Update(action);
         }
 
         /// <summary>
