@@ -64,8 +64,15 @@
         {
             string[] a = list;
             if (roleActionService.Update(list))
+            {
+                Success = "Update permision successful!";
                 return RedirectToAction("Index");
-            return RedirectToAction("Index", "HomeAdmin");
+            }
+            else
+            {
+                Failure = "Update permision fail, please try again!";
+                return RedirectToAction("Index");
+            }
         }
     }
 }

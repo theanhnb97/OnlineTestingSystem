@@ -1,4 +1,6 @@
-﻿namespace TestingSystem.Data.Repositories
+﻿using System;
+
+namespace TestingSystem.Data.Repositories
 {
     using TestingSystem.Data.Infrastructure;
     using TestingSystem.Models;
@@ -62,8 +64,10 @@
                 }
                 return DbContext.SaveChanges() != 0;
             }
-            catch
+            catch(Exception e)
             {
+                log4net.ILog logger = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+                logger.Debug(e.Message);
                 return false;
             }
         }

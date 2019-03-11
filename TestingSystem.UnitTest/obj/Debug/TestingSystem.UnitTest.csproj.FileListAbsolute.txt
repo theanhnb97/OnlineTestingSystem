@@ -72,3 +72,5 @@ D:\TheAnh\Git\Mock-Project\Team02-theanh\TestingSystem.UnitTest\bin\Debug\Testin
 D:\TheAnh\Git\Mock-Project\Team02-theanh\TestingSystem.UnitTest\bin\Debug\TestingSystem.dll.config
 D:\TheAnh\Git\Mock-Project\Team02-theanh\TestingSystem.UnitTest\bin\Debug\System.Web.Optimization.xml
 D:\TheAnh\Git\Mock-Project\Team02-theanh\TestingSystem.UnitTest\bin\Debug\AutoMapper.xml
+D:\TheAnh\Git\Mock-Project\Team02-theanh\TestingSystem.UnitTest\bin\Debug\EPPlus.dll
+D:\TheAnh\Git\Mock-Project\Team02-theanh\TestingSystem.UnitTest\bin\Debug\EPPlus.xml

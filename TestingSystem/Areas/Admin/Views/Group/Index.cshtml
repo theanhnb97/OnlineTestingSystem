@@ -99,8 +99,8 @@
                                             <a href='@Url.Action("Details", "Group", new { id=item.GroupId })'>
                                                 <div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>
                                             </a>
-                                            <a onclick="checkDel(@item.GroupId)">
-                                                <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
+                                            <a href='@Url.Action("Delete","Group", new {id = @item.GroupId })' onclick="return confirm('Are you sure you want to Delete?');">
+                                                <div class="btn  btn-sm btn-danger" onclick="checkDel(@item.GroupId)"><i class="fa fa-trash"></i></div>
                                             </a>
                                         </td>
                                     </tr>
@@ -150,15 +150,13 @@
     }
     function checkDel(idGroup) {
         $("#Status").html("Checking...");
-        $.post("@Url.Action("CheckDeleteAvailability", "Group")",
+        $.post("@Url.Action("_CheckDeleteAvailable", "Group")",
             {
                 idGroup: idGroup
             },
         function (data) {
             if (data == 0) {
-                if (confirm("Are you sure?")) {
-                    del(idGroup)
-                }
+                del(idGroup)
             }
             else {
                 $("#Status").html('<font color="Red">Cannot Delete.</font>');
@@ -171,8 +169,7 @@
         data: { id: idGroup },
         type: 'POST',
         success: function (data) {
-            alert("Delete Successful!");
-            $("#Status").html('<font color="Green">Load again.</font>');
+            $("#Status").html('<font color="Green">Delete Successful!</font>');
         }
     });
     }

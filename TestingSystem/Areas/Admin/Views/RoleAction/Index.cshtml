@@ -71,11 +71,35 @@
                 </table>
                 <br />
                 <a href="/Admin/HomeAdmin"><div ui-sref="products" class="btn btn-default">Hủy</div></a>
-                <button type="submit" class="btn btn-success pull-right" onclick="return confirm('Are you sure you want to Save new setting?');">Lưu</button>
+                <button type="submit" class="btn btn-success pull-right" onclick="Load();">Lưu</button>
             </form>
         </div>
     </div>
 </section>
+
+<div class="load-wrapp">
+    <div class="load-5">
+        <p>Scaning... Please wait some seconds...</p>
+        <div class="ring-2">
+            <div class="ball-holder">
+                <div class="ball"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/loadding.css" rel="stylesheet" />
+<script>
+    function Load() {
+        var a=confirm('Cảnh báo','Bạn có thực sự muốn quét lại chức năng của hệ thống?');
+        if(a) {
+            $(".load-wrapp").show();
+            return a;
+        }
+    }
+</script>
+
+
+
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
     $(document).ready(function () {

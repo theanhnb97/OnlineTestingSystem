@@ -53,33 +53,43 @@
         /// <param name="filterContext">The filterContext<see cref="ActionExecutingContext"/></param>
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            bool havePermision = false;
-            if (Session["Name"] != null)
+            string controller_Action =
+                filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString() + "" +
+                filterContext.Controller.ControllerContext.RouteData.Values["action"].ToString();
+            bool havePermision = controller_Action.Contains("_");
+            if (Session["Name"] != null || havePermision)
             {
                 // Get ID- Role of User
-                int id = int.Parse(Session["Name"].ToString());
-                User myUser = userService.GetUserById(id);
-                ViewBag.Account = myUser.Name;
-                ViewBag.Role = myUser.Roles.RoleName;
+                try
+                {
+                    int id = int.Parse(Session["Name"].ToString());
+                    User myUser = userService.GetUserById(id);
+                    ViewBag.Account = myUser.Name;
+                    ViewBag.Role = myUser.Roles.RoleName;
 
-                // Get List Action-Role true 
-                havePermision = myUser.Roles.RoleName == "Admin";
-                String Action = "";
-                List<RoleAction> myRoleActions = GetAction();
-                foreach (var item in myRoleActions)
-                    Action += item.Action.ActionName + ". ";
-                ViewBag.ListActions = Action;
+                    // Get List Action-Role true to Action
+                    String Action = "";
+                    List<RoleAction> myRoleActions = GetAction();
+                    foreach (var item in myRoleActions)
+                        Action += item.Action.ActionName + ". ";
+                    ViewBag.ListActions = Action;
 
-                // Get Curent Action-Controller and check Permision for Action
-                string controller_Action =  
-                    filterContext.Controller.ControllerContext.RouteData.Values["controller"].ToString() + "" +
-                    filterContext.Controller.ControllerContext.RouteData.Values["action"].ToString();
 
-                if (Action.Contains(controller_Action))
-                    havePermision = true;
-                if (controller_Action.Contains("_"))
-                    havePermision = true;
-
+                    if (myUser.Roles.RoleName == "Admin")
+                    {
+                        havePermision = myUser.Roles.RoleName == "Admin";
+                    }
+                    else
+                    {
+                        // Get Curent Action-Controller and check Permision for Action
+                        if (Action.Contains(controller_Action))
+                            havePermision = true;
+                    }
+                }
+                catch(Exception e)
+                {
+                    log.Debug(e.Message);
+                }
 
                 if (havePermision)
                     base.OnActionExecuting(filterContext);
