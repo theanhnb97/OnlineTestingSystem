@@ -180,41 +180,40 @@
                     }
                 });
 
-            $(".delete-exam").on("click",
-                function (e) {
-                    debugger;
-                    var ids = [];
-                    var id = $(this).data("val-id");
-                    if (ids.indexOf(id) < 0) {
-                        ids.push(id);
-                    }
-                    $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
-                        $.ajax({
-                            url: "/Admin/ExamPaper/Delete/",
-                            data: {
-                                ids: ids
-                            },
-                            traditional: true,
-                            type: "Get",
-                            datatype: "json",
-                            error: function (status) {
-                                $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                $("#error-msgbox-modal #error-msg1").text('');
-                                $('#error-msgbox-modal').modal('show');
-                            },
-                            success: function (data) {
-                                if (data.status) {
-                                    debugger;
-                                    $.notify("Delete exam paper successfully!", "success");
-                                    //examPaperQuestionTable.ajax.reload();
-                                    location.reload();
+            $('#example2').on('click', '.delete-exam', function (e) {
+                debugger;
+                var ids = [];
+                var id = $(this).data("val-id");
+                if (ids.indexOf(id) < 0) {
+                    ids.push(id);
+                }
+                $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                    $.ajax({
+                        url: "/Admin/ExamPaper/Delete/",
+                        data: {
+                            ids: ids
+                        },
+                        traditional: true,
+                        type: "Get",
+                        datatype: "json",
+                        error: function (status) {
+                            $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                            $("#error-msgbox-modal #error-msg1").text('');
+                            $('#error-msgbox-modal').modal('show');
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                debugger;
+                                $.notify("Delete exam paper successfully!", "success");
+                                //examPaperQuestionTable.ajax.reload();
+                                location.reload();
 
-                                }
                             }
-                        });
-                        e.stopPropagation();
+                        }
                     });
+                    e.stopPropagation();
                 });
+            });
         });
     </script>
 }

@@ -116,45 +116,40 @@
                 'order': [[1, 'asc']]
 
             });
+        });
 
-            setTimeout(function () {
-                $(".add-question-row").on("click",
-                    function (e) {
-                        //var ids = [];
-                        var id = $(this).data("questionid-val");
-                        var examPaperId = $('#ExamPaperID').val();
+        $('#questionTable').on('click', '.add-question-row', function (e) {
+            //var ids = [];
+            var id = $(this).data("questionid-val");
+            var examPaperId = $('#ExamPaperID').val();
+            debugger;
+            //if (ids.indexOf(id) < 0) {
+            //    ids.push(id);
+            //}
+            $.ajax({
+                url: "/Admin/ExamPaperQuestion/Insert/",
+                data: {
+                    examPaperId: examPaperId,
+                    questionId: id,
+                },
+                traditional: true,
+                type: "POST",
+                datatype: "json",
+                error: function (status) {
+                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                    $("#error-msgbox-modal #error-msg1").text('');
+                    $('#error-msgbox-modal').modal('show');
+                },
+                success: function (data) {
+                    if (data.status) {
                         debugger;
-                        //if (ids.indexOf(id) < 0) {
-                        //    ids.push(id);
-                        //}
-                        $.ajax({
-                            url: "/Admin/ExamPaperQuestion/Insert/",
-                            data: {
-                                examPaperId: examPaperId,
-                                questionId: id,
-                            },
-                            traditional: true,
-                            type: "POST",
-                            datatype: "json",
-                            error: function (status) {
-                                //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                //$("#error-msgbox-modal #error-msg1").text('');
-                                //$('#error-msgbox-modal').modal('show');
-                            },
-                            success: function (data) {
-                                if (data.status) {
-                                    debugger;
-                                    //$.notify("Add question into exam paper successfully!", "success");
-                                    $('#questionTable').DataTable().ajax.reload();
-                                    $('#questionExamTable').DataTable().ajax.reload();
-                                }
-                                //location.reload();
-                            }
-
-                        });
-                    });
-
-            }, 8000);
+                        $.notify("Add question into exam paper successfully!", "success");
+                        $('#questionTable').DataTable().ajax.reload();
+                        $('#questionExamTable').DataTable().ajax.reload();
+                    }
+                }
+            });
+            e.stopPropagation();
         });
 
         $('#random').on("click", function () {
@@ -168,14 +163,14 @@
                 type: "GET",
                 datatype: "json",
                 error: function (status) {
-                    //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                    //$("#error-msgbox-modal #error-msg1").text('');
-                    //$('#error-msgbox-modal').modal('show');
+                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                    $("#error-msgbox-modal #error-msg1").text('');
+                    $('#error-msgbox-modal').modal('show');
                 },
                 success: function (data) {
                     if (data.status) {
                         debugger;
-                        //$.notify("Random question into exam paper successfully!", "success");
+                        $.notify("Random question into exam paper successfully!", "success");
                         $('#questionTable').DataTable().ajax.reload();
                         $('#questionExamTable').DataTable().ajax.reload();
                     }

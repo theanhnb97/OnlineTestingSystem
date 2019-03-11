@@ -227,63 +227,40 @@
             }],
             'order': [[1, 'asc']]
 
-        });
+            });
 
-            //var questionExamTable = $('#questionExamTable').DataTable({
-            //    'paging': true,
-            //    'lengthChange': true,
-            //    'searching': true,
-            //    'ordering': true,
-            //    'info': true,
-            //    "destroy": true,
-            //    //"thousands": ",",
-            //    'autoWidth': true,
-            //    "loadingRecords": "Đang tải...",
-            //    "processing": "Đang thực hiện...",
-            //    //"infoFiltered":   "(filtered from _MAX_ total entries)",
-            //    //"lengthMenu": [ 5, 10, 15, 25]
-            //});
-            setTimeout(function () {
-                $(".remove-question-exam").on("click",
-                    function (e) {
-                        debugger;
-                        var ids = [];
-                        var id = $(this).data("val-id");
-                        if (ids.indexOf(id) < 0) {
-                            ids.push(id);
+            $('#questionExamTable').on('click', '.remove-question-exam', function (e) {
+                debugger;
+                var ids = [];
+                var id = $(this).data("val-id");
+                if (ids.indexOf(id) < 0) {
+                    ids.push(id);
+                }
+                $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                    $.ajax({
+                        url: "/Admin/ExamPaperQuestion/Delete/",
+                        data: {
+                            ids: ids
+                        },
+                        traditional: true,
+                        type: "Get",
+                        datatype: "json",
+                        error: function (status) {
+                            $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                            $("#error-msgbox-modal #error-msg1").text('');
+                            $('#error-msgbox-modal').modal('show');
+                        },
+                        success: function (data) {
+                            if (data.status) {
+                                debugger;
+                                $.notify("Delete question successfully!", "success");
+                                examPaperQuestionTable.ajax.reload();
+                            }
                         }
-                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
-                            $.ajax({
-                                url: "/Admin/ExamPaperQuestion/Delete/",
-                                data: {
-                                    ids: ids
-                                },
-                                traditional: true,
-                                type: "Get",
-                                datatype: "json",
-                                error: function (status) {
-                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                                    $("#error-msgbox-modal #error-msg1").text('');
-                                    $('#error-msgbox-modal').modal('show');
-                                },
-                                success: function (data) {
-                                    if (data.status) {
-                                        debugger;
-                                        //$.notify("Delete question successfully!", "success");
-                                        examPaperQuestionTable.ajax.reload();
-                                        //location.reload
-
-                                    }
-
-                                }
-
-                            });
-                            e.stopPropagation();
-                        });
                     });
-
-            }, 8000);
-
+                    e.stopPropagation();
+                });
+            });
 
             $('#btn-add-question').click(function () {
 
@@ -300,9 +277,9 @@
                         datatype: "json",
                         error: function (status) {
                             debugger;
-                            //$("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
-                            //$("#error-msgbox-modal #error-msg1").text('');
-                            //$('#error-msgbox-modal').modal('show');
+                            $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                            $("#error-msgbox-modal #error-msg1").text('');
+                            $('#error-msgbox-modal').modal('show');
                         },
                         success: function (data) {
                             $.each(data, function (index, item) {
@@ -324,11 +301,11 @@
                 $('#basicExampleModal').modal('show');
             });
 
-                document.getElementById("time").addEventListener('input', restrictToInteger);
 
-        function restrictToInteger() {
-            this.value = this.value.replace(/[^\d]/g, '');
-        }
+            document.getElementById("time").addEventListener('input', restrictToInteger);
+            function restrictToInteger() {
+                this.value = this.value.replace(/[^\d]/g, '');
+            }
 
         });
     </script>
