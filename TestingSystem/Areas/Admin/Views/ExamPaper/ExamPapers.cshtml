@@ -21,7 +21,7 @@
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="box">
+            <div class="box" style="margin-bottom: 10px !important">
                 <div class="clearfix"></div>
             </div>
             <!-- /.box-header -->
@@ -29,16 +29,16 @@
                 @using (Html.BeginForm("Index", "QuestionCategory", FormMethod.Post))
                 {
                     <div class="row">
-                        <div class="col-md-6" style="margin-bottom:15px">
-                            <div class="input-group">
-                                <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">Search</button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <a href="@Url.Action("ExamPaper","ExamPaper")">
+                        @*<div class="col-md-6" style="margin-bottom:15px">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Search</button>
+                                    </span>
+                                </div>
+                            </div>*@
+                        <div class="col-md-6" style="margin-bottom: 20px;">
+                            <a href="@Url.Action("ExamPaper","ExamPaper")" style="margin-right: 10px;">
                                 <div class="btn btn-success">Create</div>
                             </a>
                             <a href="@Url.Action("ImportExamPaper","ExamPaper")">
@@ -49,7 +49,7 @@
                 }
 
                 @*<form action="@Url.Action("Delete","ExamPaper")" id="form-delete" method="post">*@
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="examPapers" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <td width="5%"><input name="all" id="checkall" type="checkbox" onchange="Check(this)" /></td>
@@ -131,13 +131,29 @@
     function status(val) {
         window.location.href = "User?status=" + val.value;
     }
+
+    $(function () {
+        $('#examPapers').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': false,
+            //"thousands": ",",
+            'autoWidth': true,
+            "loadingRecords": "Đang tải...",
+            "processing": "Đang thực hiện...",
+            //"infoFiltered":   "(filtered from MAX total entries)",
+            //"lengthMenu": [ 5, 10, 15, 25]
+        });
+    })
 </script>
 @section scripts{
     <script>
         $(document).ready(function () {
             $("#delete-multiple").on("click",
                 function (e) {
-                    var data = $('#example2').DataTable().$('input.checkone:checkbox:checked');
+                    var data = $('#examPapers').DataTable().$('input.checkone:checkbox:checked');
                     debugger;
                     if (data.length === 0) {
                         $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
@@ -169,7 +185,7 @@
                                 success: function (data) {
                                     if (data.status) {
                                         debugger;
-                                        location.reload();                            
+                                        location.reload();
                                         //examPaperQuestionTable.ajax.reload();
 
                                     }
@@ -180,7 +196,7 @@
                     }
                 });
 
-            $('#example2').on('click', '.delete-exam', function (e) {
+            $('#examPapers').on('click', '.delete-exam', function (e) {
                 debugger;
                 var ids = [];
                 var id = $(this).data("val-id");
@@ -214,5 +230,3 @@
         });
     </script>
 }
-
-
