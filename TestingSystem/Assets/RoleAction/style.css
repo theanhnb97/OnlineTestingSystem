@@ -25,7 +25,7 @@ input .list {
 }
 .text-left{
     padding-left: 15px;
-    max-width: 10%
+    width: 10%
 }
 
 label {

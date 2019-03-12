@@ -74,17 +74,9 @@
                         Action += item.Action.ActionName + ". ";
                     ViewBag.ListActions = Action;
 
-
-                    if (myUser.Roles.RoleName == "Admin")
-                    {
-                        havePermision = myUser.Roles.RoleName == "Admin";
-                    }
-                    else
-                    {
-                        // Get Curent Action-Controller and check Permision for Action
-                        if (Action.Contains(controller_Action))
-                            havePermision = true;
-                    }
+                    // Get Curent Action-Controller and check Permision for Action
+                    if (Action.Contains(controller_Action))
+                        havePermision = true;
                 }
                 catch(Exception e)
                 {

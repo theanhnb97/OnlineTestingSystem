@@ -64,7 +64,7 @@
 
         public ActionResult ExamPapers()
         {
-            var examPapers = new List<TestingSystem.Models.ExamPaper>();
+            var examPapers = new List<ExamPaper>();
             examPapers = examPaperService.GetAll().ToList();
             foreach (var item in examPapers)
             {
@@ -78,7 +78,7 @@
         public ActionResult ExamPaper(int? examPaperId)
         {
             var model = new Models.ExamPaper();
-            var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
+            var questions = new List<QuestionDto>();
 
             if (examPaperId == null || examPaperId == 0)
             {

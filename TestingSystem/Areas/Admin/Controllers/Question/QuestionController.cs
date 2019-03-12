@@ -291,7 +291,7 @@ namespace TestingSystem.Areas.Admin.Controllers.Question
 
         public ActionResult GetQuestionsByQuestionCategoryIdAndExamPaperId(int categoryId, int examPaperId)
         {
-            var questions = new List<TestingSystem.DataTranferObject.Question.QuestionDto>();
+            var questions = new List<QuestionDto>();
             questions = questionService.GetQuestionsByQuestionCategoryIdAndExamPaperId(categoryId, examPaperId)
                 .ToList();
 

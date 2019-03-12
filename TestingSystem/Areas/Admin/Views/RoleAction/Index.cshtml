@@ -26,7 +26,7 @@
             <form class="form-horizontal" action="/Admin/RoleAction/Index" method="post">
                 <table style="font-family: arial, sans-serif; border-collapse: collapse; width: 100%; padding: 10px">
                     <tr class="headerr">
-                        <th class="text-left">Thao tác</th>
+                        <th width="5%" class="text-left">Thao tác</th>
                         @foreach (var item in @role)
                         {
                             <th style="text-align: center">@item.RoleName</th>
@@ -57,7 +57,7 @@
                                         {
                                             <div class="form-check">
                                                 <label>
-                                                    <input type="checkbox" name="list" value="@item.Id" checked="@item.IsTrue">
+                                                    <input type="checkbox" name="list" value="@item.Id" checked='@item.IsTrue'>
                                                     <span class="label-text"></span>
                                                 </label>
                                             </div>
