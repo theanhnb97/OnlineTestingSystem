@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Question Category list";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
     int stt = 0;
@@ -28,9 +27,9 @@
                     <div class="row">
                         <div class="col-md-6" style="margin-bottom:15px">
                             <div class="input-group">
-                                <input type="text" class="form-control" value="" name="KeySearch" id="KeySearch" onclick="get_content()" placeholder="Key Search">
+                                <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" id="searchText" type="submit">Search</button>
+                                    <button class="btn btn-default" type="submit">Search</button>
                                 </span>
                             </div>
                         </div>
@@ -74,8 +73,7 @@
                                         <a href='@Url.Action("EditCategory","QuestionCategory", new {questionCategory = @item.CategoryID })'>
                                             <div class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></div>
                                         </a>
-                                        <a href='@Url.Action("Delete","QuestionCategory", new {ids = @item.CategoryID })' 
-                                           onclick="return confirm('Are you sure you want to delete this Category?');">
+                                        <a href='@Url.Action("Delete","QuestionCategory", new {ids = @item.CategoryID })' onclick="return confirm('Are you sure you want to delete this question category?');">
                                             <div class="btn  btn-sm btn-danger"><i class="fa fa-trash"></i></div>
                                         </a>
                                         @*<div class="btn  btn-sm btn-success"><i class="fa fa-eye"></i></div>*@
@@ -83,17 +81,15 @@
                                 </tr>
                             }
                         </tbody>
-
                     </table>
-                    <a onclick="return confirm('Are you sure you want to delete multiple Category?');">
-                        <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Delete</button>
+                    <a onclick="return confirm('Are you sure you want to delete multiple question category?');">
+                        <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Xóa</button>
                     </a>
                 </form>
             </div>
             <!-- /.box-body -->
         </div>
         <!-- /.box -->
-
     </div>
     <!-- /.col -->
     </div>
@@ -126,16 +122,98 @@
             document.getElementById("btn-delete").disabled = true;
         }
     }
-    function reload(val) {
-        window.location.href = "User?filter=" + val.value;
+    function reload() {
+        window.location.href = "QuestionCategory/Index"
     }
-    function status(val) {
-        window.location.href = "User?status=" + val.value;
-    }
-
-
-
 
 </script>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#delete-multiple").on("click",
+                function (e) {
+                    var data = $('#example2').DataTable().$('input.checkone:checkbox:checked');
+                    debugger;
+                    if (data.length === 0) {
+                        $("#error-msgbox-modal #error-msg").text('Please choose record to delete!');
+                        $("#error-msgbox-modal #error-msg1").text('');
+                        $('#error-msgbox-modal').modal('show');
+                    } else {
+                        var ids = [];
+                        $.each(data, function (index, elem) {
+                            var rowId = $(elem).val();
+                            if (ids.indexOf(rowId) < 0) {
+                                ids.push(rowId);
+                            }
+                        });
+                        debugger;
+                        $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                            $.ajax({
+                                url: "/Admin/QuestionCategory/Delete/",
+                                data: {
+                                    ids: ids
+                                },
+                                type: "Get",
+                                datatype: "json",
+                                traditional: true,
+                                error: function (data) {
+                                    $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                    $("#error-msgbox-modal #error-msg1").text('');
+                                    $('#error-msgbox-modal').modal('show');
+                                },
+                                success: function (data) {
+                                    if (data.status) {
+                                        debugger;
+                                        $.notify("Delete question category successfully!", "success");
 
+                                    }
+                                    location.reload();
+                                }
 
+                            });
+                            e.stopPropagation();
+                        });
+                    }
+
+                });
+
+            $(".delete-exam").on("click",
+                function (e) {
+                    debugger;
+                    var ids = [];
+                    var id = $(this).data("val-id");
+                    if (ids.indexOf(id) < 0) {
+                        ids.push(id);
+                    }
+                    $('#delete-msgbox-modal').modal('show').off('click', '#btn-delete').on('click', '#btn-delete', function (e) {
+                        $.ajax({
+                            url: "/Admin/QuestionCategory/Delete/",
+                            data: {
+                                ids: ids
+                            },
+                            traditional: true,
+                            type: "Get",
+                            datatype: "json",
+                            error: function (status) {
+                                $("#error-msgbox-modal #error-msg").text('Something went wrong, please try again!');
+                                $("#error-msgbox-modal #error-msg1").text('');
+                                $('#error-msgbox-modal').modal('show');
+                            },
+                            success: function (data) {
+                                if (data.status) {
+                                    debugger;
+                                    $.notify("Delete question category successfully!", "success");
+                                    //examPaperQuestionTable.ajax.reload();
+                                    location.reload
+
+                                }
+
+                            }
+
+                        });
+                        e.stopPropagation();
+                    });
+                });
+        });
+    </script>
+}

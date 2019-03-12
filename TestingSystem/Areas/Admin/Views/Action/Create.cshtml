@@ -7,12 +7,12 @@
 @Scripts.Render("~/bundles/jqueryval")
 <section class="content-header">
     <h1>
-        Thêm mới tác vụ/ hành động
+        Action
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-        <li><a href="#">Tài khoản</a></li>
-        <li class="active">Thêm mới</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li><a href="#">Action</a></li>
+        <li class="active">Create</li>
     </ol>
 </section>
 <section class="content">
@@ -26,7 +26,7 @@
             <div class="box-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Tên tác vụ</label>
+                    <label for="inputEmail3" class="col-sm-2 control-label">Action name</label>
                     <div class="col-sm-6">
                         <input type="text" name="ActionName" id="ActionName" class="form-control"/>
                         @*@Html.EditorFor(model => model.ActionName, new { htmlAttributes = new { @class = "form-control" } })*@
@@ -34,15 +34,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Chi tiết</label>
+                    <label for="inputEmail3" class="col-sm-2 control-label">Description</label>
                     <div class="col-sm-6">
                         <input type="text" placeholder="Viết liền không dấu" class="form-control" name="Description">
                     </div>
                 </div>
             </div><!-- /.box-body -->
             <div class="box-footer">
-                <a href="/Admin/Action"><div ui-sref="products" class="btn btn-default">Hủy</div></a>
-                <button type="submit" class="btn btn-success pull-right">Lưu</button>
+                <a href="/Admin/Action"><div ui-sref="products" class="btn btn-default">Cancel</div></a>
+                <button type="submit" class="btn btn-success pull-right">Save</button>
             </div><!-- /.box-footer -->
         </form>
         <br />

@@ -7259,12 +7259,10 @@
     <Content Include="Areas\Admin\Views\User\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Action\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Action\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\Action\Create2.cshtml" />
     <Content Include="Areas\Admin\Views\Action\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Role\CreateRole.cshtml" />
     <Content Include="Areas\Admin\Views\Role\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Action\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Action\Edit2.cshtml" />
     <Content Include="Areas\Admin\Views\RoleAction\Index.cshtml" />
     <Content Include="Areas\Admin\Views\User\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\User\Detail.cshtml" />

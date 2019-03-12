@@ -30,13 +30,13 @@
                 {
                     <div class="row">
                         @*<div class="col-md-6" style="margin-bottom:15px">
-                            <div class="input-group">
-                                <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">Search</button>
-                                </span>
-                            </div>
-                        </div>*@
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="" name="KeySearch" placeholder="Key Search">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">Search</button>
+                                    </span>
+                                </div>
+                            </div>*@
                         <div class="col-md-6" style="margin-bottom: 20px;">
                             <a href="@Url.Action("ExamPaper","ExamPaper")" style="margin-right: 10px;">
                                 <div class="btn btn-success">Create</div>
@@ -131,22 +131,6 @@
     function status(val) {
         window.location.href = "User?status=" + val.value;
     }
-
-    $(function () {
-        $('#examPapers').DataTable({
-            'paging': true,
-            'lengthChange': true,
-            'searching': true,
-            'ordering': true,
-            'info': false,
-            //"thousands": ",",
-            'autoWidth': true,
-            "loadingRecords": "Đang tải...",
-            "processing": "Đang thực hiện...",
-            //"infoFiltered":   "(filtered from _MAX_ total entries)",
-            //"lengthMenu": [ 5, 10, 15, 25]
-        });
-    })
 </script>
 @section scripts{
     <script>
@@ -185,7 +169,7 @@
                                 success: function (data) {
                                     if (data.status) {
                                         debugger;
-                                        location.reload();                            
+                                        location.reload();
                                         //examPaperQuestionTable.ajax.reload();
 
                                     }
@@ -230,5 +214,3 @@
         });
     </script>
 }
-
-

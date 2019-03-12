@@ -7,7 +7,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Danh sách nhóm
+        List Group
     </h1>
     <ol class="breadcrumb">
         <li><a href="@Url.Action("Index", "Group")"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -19,7 +19,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Hiển thị danh sách Nhóm</h3>
+                    <h3 class="box-title">Show List Group</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -28,7 +28,7 @@
                             <div class="input-group" style="width: 100%">
                                 @using (Html.BeginForm("Search", "Group", FormMethod.Post))
                                 {
-                                    <input type="text" class="form-control" placeholder="Từ khóa" id="nameGroup" name="nameGroup" style="width: 80%">
+                                    <input type="text" class="form-control" placeholder="Group Name" id="nameGroup" name="nameGroup" style="width: 80%">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="submit">Tìm kiếm</button>
                                     </span>
@@ -36,7 +36,7 @@
                             </div><!-- /input-group -->
                         </div>
                         <div class="col-md-6">
-                            <a href="@Url.Action("Create")"><button class="btn btn-success">Thêm mới</button></a>
+                            <a href="@Url.Action("Create")"><button class="btn btn-success">Search</button></a>
                         </div>
                     </div>
                     <!---->
@@ -63,7 +63,7 @@
                             <thead>
                                 <tr>
                                     <td width="5%"><input name="all" id="checkall" type="checkbox" onchange="Check(this)" /></td>
-                                    <th>STT</th>
+                                    <th>Rank</th>
                                     <th>Group Name</th>
                                     <th>Created Date</th>
                                     <th>Updated Date</th>
@@ -77,7 +77,7 @@
                                     stt++;
                                     <tr>
                                         <td><input type="checkbox" id="checkone" name="list" value="@item.GroupId" onchange="changee(this);" /></td>
-                                        <td>@Html.DisplayFor(modelItem => item.GroupId)</td>
+                                        <td>@stt</td>
                                         <td>@Html.DisplayFor(modelItem => item.GroupName)</td>
                                         <td>
                                             @item.CreatedDate.ToString("dd/ MM/ yyyy")
@@ -104,7 +104,7 @@
                             </tbody>
                         </table>
                         <a onclick="return confirm('Are you sure you want to Multi Delete?');">
-                            <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Xóa</button>
+                            <button type="submit" class="btn btn-danger" id="btn-delete" disabled>Delete</button>
                         </a>
                     </form>
                 </div>
