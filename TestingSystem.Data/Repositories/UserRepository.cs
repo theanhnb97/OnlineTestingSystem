@@ -456,7 +456,7 @@ namespace TestingSystem.Data.Repositories
             {
                 try
                 {
-                    var list = listUser.Where(x => x.UserName.Contains(SearchString) || x.Name.Contains(SearchString) || x.Email.Contains(SearchString) || x.Address.Contains(SearchString)).ToList();
+                    var list = listUser.Where(x => x.UserName.Contains(SearchString) || x.Name.Contains(SearchString) || x.Email.Contains(SearchString)).ToList();
                     return list;
                 }
                 catch (Exception e)
