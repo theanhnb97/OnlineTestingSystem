@@ -131,22 +131,6 @@
     function status(val) {
         window.location.href = "User?status=" + val.value;
     }
-
-    $(function () {
-        $('#examPapers').DataTable({
-            'paging': true,
-            'lengthChange': true,
-            'searching': true,
-            'ordering': true,
-            'info': false,
-            //"thousands": ",",
-            'autoWidth': true,
-            "loadingRecords": "Đang tải...",
-            "processing": "Đang thực hiện...",
-            //"infoFiltered":   "(filtered from MAX total entries)",
-            //"lengthMenu": [ 5, 10, 15, 25]
-        });
-    })
 </script>
 @section scripts{
     <script>
